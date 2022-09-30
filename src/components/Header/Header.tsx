@@ -15,7 +15,7 @@ export default function Header() {
     <>
       <header className="container mx-auto">
         <nav
-            className=" 
+            className="
               flex flex-wrap
               items-center
               justify-between
