@@ -42,7 +42,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
 
-                  {/* <Route path="/create-fund" element={<CreateFund />} /> */}
+                  <Route path="/create-fund" element={<CreateFund />} />
 
                   {/* <Route
                 path="/fund/trading"
@@ -114,7 +114,9 @@ function App() {
                 </Routes>
               </div>
             </Router>
-            {/* <Footer /> */}
+            <div className="bg-gray-800">
+              <Footer />
+            </div>
           </div>
         </RainbowKitProvider>
       </WagmiConfig>
