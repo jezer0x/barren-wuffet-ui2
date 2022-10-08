@@ -28,7 +28,7 @@ const CreateFundForm: FunctionComponent = () => {
   const [closeDate, setCloseDate] = useState(new Date("2022-10-20"));
   const [fees, setFees] = useState(1);
 
-  const [isSubmitted, setIsSubmitted] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   const handleSocialFn = (prefix: string) => {
