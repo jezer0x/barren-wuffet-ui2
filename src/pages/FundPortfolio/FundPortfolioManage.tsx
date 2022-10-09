@@ -13,10 +13,13 @@ function classNames(...classes: string[]) {
 }
 
 const FundPortfolioManage = () => {
-    const funds = {
-        openSea: {
+    const funds = [
+        {
+            id: 0,
             name: "OpenSea Fund",
             logo: openSeaLogo,
+            expiresIn: 751,
+            walletAddress: '8BMMk4gdD263q7QJt3VLWnG2x1mt9HV56b4vX774n4Sc',
             assetBalances: [
                 {
                     asset: "BTC",
@@ -38,9 +41,12 @@ const FundPortfolioManage = () => {
                 },
             ],
         },
-        funCon: {
+        {
+            id: 1,
             name: "FunCon Fund",
             logo: funConLogo,
+            expiresIn: 677,
+            walletAddress: '3423ff4r4gdD263q7QJtjudf739t9HV56b4vX324ffsdfs',
             assetBalances: [
                 {
                     asset: "BTC",
@@ -62,9 +68,12 @@ const FundPortfolioManage = () => {
                 },
             ],
         },
-        netFine: {
+        {
+            id: 3,
             name: "NetFine",
             logo: netFineLogo,
+            expiresIn: 952,
+            walletAddress: 'sdifnu43824339024kdfn20498ksdn2349ndfwf2',
             assetBalances: [
                 {
                     asset: "BTC",
@@ -86,13 +95,14 @@ const FundPortfolioManage = () => {
                 },
             ],
         },
-    }
+    ]
+
     return (
         <div className='container mx-auto my-20'>
             <Menu as="div" className="relative inline-block text-left">
                 <div>
-                    <Menu.Button className="inline-flex w-full justify-center rounded-md bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-orange-100">
-                        <div className='flex justify-between space-x-24'>
+                    <Menu.Button className="inline-flex w-full justify-center rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-orange-100">
+                        <div className='flex justify-between space-x-36'>
                             <div className='flex space-x-2 items-center'>
                                 <img src={openSeaLogo} alt="" />
                                 <p className='text-2xl font-bold'>OpenSea Fund</p>
@@ -111,63 +121,28 @@ const FundPortfolioManage = () => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 w-11/12 origin-top-right rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                        <Menu.Item>
-                        {({ active }) => (
-                            <a
-                            href="#"
-                            className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                            )}
-                            >
-                            Account settings
-                            </a>
-                        )}
-                        </Menu.Item>
-                        <Menu.Item>
-                        {({ active }) => (
-                            <a
-                            href="#"
-                            className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                            )}
-                            >
-                            Support
-                            </a>
-                        )}
-                        </Menu.Item>
-                        <Menu.Item>
-                        {({ active }) => (
-                            <a
-                            href="#"
-                            className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block px-4 py-2 text-sm'
-                            )}
-                            >
-                            License
-                            </a>
-                        )}
-                        </Menu.Item>
-                        <form method="POST" action="#">
-                        <Menu.Item>
-                            {({ active }) => (
-                            <button
-                                type="submit"
-                                className={classNames(
-                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                'block w-full px-4 py-2 text-left text-sm'
-                                )}
-                            >
-                                Sign out
-                            </button>
-                            )}
-                        </Menu.Item>
-                        </form>
-                    </div>
+                    <Menu.Items className="absolute left-0 z-10 mt-2 w-11/12 origin-top-right rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            {
+                                funds.map(fund => (
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <div
+                                                className={classNames(
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-white',
+                                                'px-4 py-2 w-full font-bold text-xl text-start flex items-center space-x-4'
+                                                )}
+                                            >
+                                                <img src={fund.logo} alt="" />
+                                                <button>
+                                                    {fund.name}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </Menu.Item>
+                                ))
+                            }
+                        </div>
                     </Menu.Items>
                 </Transition>
             </Menu>
