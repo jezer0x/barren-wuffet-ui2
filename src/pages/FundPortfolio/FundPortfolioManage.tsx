@@ -1,151 +1,221 @@
-import React from 'react';
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-// import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import dropDownArrow from "../../img/icons/dropDownArrowGray.svg";
+import React, { useEffect, useState } from 'react';
 import openSeaLogo from "../../img/fundLogos/openSeaLogo.png";
 import netFineLogo from "../../img/fundLogos/netFineLogo.png";
 import funConLogo from "../../img/fundLogos/funConLogo.png";
+import DropDownMenu from '../../components/FundPortfolio/DropDownMenu';
+import { Trans } from '@lingui/macro';
+import ExtraSmallText from '../../components/ui/ExtraSmallText';
 
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+interface fundType {
+    id: number;
+    name: string;
+    logo: string;
+    investors: number;
+    expiresIn: number;
+    portfolioValue: number;
+    startingValue: number;
+    dataUpdated: string;
+    newlyAddedMoney: number;
+    upPercentag: number;
+    wallet: number;
+    walletAddress: string;
+    assetBalances: object;
+    protocolBalances: object;
 }
 
-const FundPortfolioManage = () => {
-    const funds = [
-        {
-            id: 0,
-            name: "OpenSea Fund",
-            logo: openSeaLogo,
-            expiresIn: 751,
-            walletAddress: '8BMMk4gdD263q7QJt3VLWnG2x1mt9HV56b4vX774n4Sc',
-            assetBalances: [
-                {
-                    asset: "BTC",
-                    balance: 30,
-                },
-                {
-                    asset: "ETH",
-                    balance: 40,
-                },
-            ],
-            protocolBalances: [
-                {
-                    protocol: "Curve",
-                    balance: 29,
-                },
-                {
-                    protocol: "Dopex",
-                    balance: 46,
-                },
-            ],
-        },
-        {
-            id: 1,
-            name: "FunCon Fund",
-            logo: funConLogo,
-            expiresIn: 677,
-            walletAddress: '3423ff4r4gdD263q7QJtjudf739t9HV56b4vX324ffsdfs',
-            assetBalances: [
-                {
-                    asset: "BTC",
-                    balance: 20,
-                },
-                {
-                    asset: "ETH",
-                    balance: 70,
-                },
-            ],
-            protocolBalances: [
-                {
-                    protocol: "Curve",
-                    balance: 12,
-                },
-                {
-                    protocol: "Dopex",
-                    balance: 32,
-                },
-            ],
-        },
-        {
-            id: 3,
-            name: "NetFine",
-            logo: netFineLogo,
-            expiresIn: 952,
-            walletAddress: 'sdifnu43824339024kdfn20498ksdn2349ndfwf2',
-            assetBalances: [
-                {
-                    asset: "BTC",
-                    balance: 34,
-                },
-                {
-                    asset: "ETH",
-                    balance: 56,
-                },
-            ],
-            protocolBalances: [
-                {
-                    protocol: "Curve",
-                    balance: 12,
-                },
-                {
-                    protocol: "Dopex",
-                    balance: 82,
-                },
-            ],
-        },
-    ]
+const funds = [
+    {
+        id: 0,
+        name: "OpenSea Fund",
+        logo: openSeaLogo,
+        investors: 107,
+        expiresIn: 751,
+        portfolioValue: 234567,
+        startingValue: 400,
+        dataUpdated: '1 min',
+        newlyAddedMoney: 2560.78,
+        upPercentag: 14.67,
+        wallet: 8323,
+        walletAddress: '8BMMk4gdD263q7QJt3VLWnG2x1mt9HV56b4vX774n4Sc',
+        assetBalances: [
+            {
+                asset: "BTC",
+                balance: 30,
+                dollarValue: 584991,
+                down: 2600,
+                percentage: 24.67,
+            },
+            {
+                asset: "ETH",
+                balance: 40,
+                dollarValue: 811,
+                down: 500,
+                percentage: 13.97,
+            },
+        ],
+        protocolBalances: [
+            {
+                protocol: "Curve",
+                balance: 29,
+                dollarValue: 564,
+                down: 0,
+                percentage: 23.6,
+            },
+            {
+                protocol: "Dopex",
+                balance: 46,
+                dollarValue: 2348,
+                down: 0,
+                percentage: 5,
+            },
+        ],
+    } as fundType,
+    {
+        id: 1,
+        name: "FunCon Fund",
+        logo: funConLogo,
+        investors: 87,
+        expiresIn: 677,
+        portfolioValue: 234567,
+        startingValue: 400,
+        dataUpdated: '1 min',
+        newlyAddedMoney: 2560.78,
+        upPercentag: 14.67,
+        wallet: 5643,
+        walletAddress: '3423ff4r4gdD263q7QJtjudf739t9HV56b4vX324ffsdfs',
+        assetBalances: [
+            {
+                asset: "BTC",
+                balance: 30,
+                dollarValue: 584991,
+                down: 2600,
+                percentage: 24.67,
+            },
+            {
+                asset: "ETH",
+                balance: 40,
+                dollarValue: 811,
+                down: 500,
+                percentage: 13.97,
+            },
+        ],
+        protocolBalances: [
+            {
+                protocol: "Curve",
+                balance: 29,
+                dollarValue: 564,
+                down: 0,
+                percentage: 23.6,
+            },
+            {
+                protocol: "Dopex",
+                balance: 46,
+                dollarValue: 2348,
+                down: 0,
+                percentage: 5,
+            },
+        ],
+    } as fundType,
+    {
+        id: 3,
+        name: "NetFine",
+        logo: netFineLogo,
+        investors: 145,
+        expiresIn: 952,
+        portfolioValue: 234567,
+        startingValue: 400,
+        dataUpdated: '1 min',
+        newlyAddedMoney: 2560.78,
+        upPercentag: 14.67,
+        wallet: 6732,
+        walletAddress: 'sdifnu43824339024kdfn20498ksdn2349ndfwf2',
+        assetBalances: [
+            {
+                asset: "BTC",
+                balance: 30,
+                dollarValue: 584991,
+                down: 2600,
+                percentage: 24.67,
+            },
+            {
+                asset: "ETH",
+                balance: 40,
+                dollarValue: 811,
+                down: 500,
+                percentage: 13.97,
+            },
+        ],
+        protocolBalances: [
+            {
+                protocol: "Curve",
+                balance: 29,
+                dollarValue: 564,
+                down: 0,
+                percentage: 23.6,
+            },
+            {
+                protocol: "Dopex",
+                balance: 46,
+                dollarValue: 2348,
+                down: 0,
+                percentage: 5,
+            },
+        ],
+    } as fundType,
+] 
 
+const FundPortfolioManage = () => {
+    const [presentFundId, setPresentFundId] = useState(funds[0].id);
+    const [presentFund, setPresentFund] = useState<fundType>(funds[0]);
+
+    const { expiresIn, investors, walletAddress, portfolioValue, startingValue, dataUpdated, newlyAddedMoney, upPercentag, assetBalances, protocolBalances } = presentFund;
+
+    const handleFundSwitch = (id: React.SetStateAction<number>) => {
+        setPresentFundId(id)
+    }
+    useEffect(() => {
+        const filtered = funds.filter((fund) => fund.id === presentFundId)
+        setPresentFund(filtered[0]);
+    }, [presentFund, presentFundId]);
     return (
         <div className='container mx-auto my-20'>
-            <Menu as="div" className="relative inline-block text-left">
-                <div>
-                    <Menu.Button className="inline-flex w-full justify-center rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-orange-100">
-                        <div className='flex justify-between space-x-36'>
-                            <div className='flex space-x-2 items-center'>
-                                <img src={openSeaLogo} alt="" />
-                                <p className='text-2xl font-bold'>OpenSea Fund</p>
-                            </div>
-                            <img src={dropDownArrow} alt="" />
+            <div className='bg-[#1c1b25] pt-10 px-8 rounded-xl'>
+                <div className='space-y-6'>
+                    <DropDownMenu
+                        handleFundSwitch={handleFundSwitch}
+                        presentFund={presentFund}
+                        funds={funds}
+                        presentFundId={presentFundId}
+                    ></DropDownMenu>
+                    <div>
+                        <div className='flex space-x-12'>
+                            <p className='text-xs font-medium text-gray-400'>
+                                Expiry in:
+                                <span className='bg-[#33333f] py-1 px-2 rounded-xl ml-2'>
+                                    {expiresIn} days
+                                </span>
+                            </p>
+                            <p className='text-xs font-medium text-gray-400'>
+                                Investors:
+                                <span className='bg-[#33333f] py-1 px-2 rounded-xl ml-2'>
+                                    {investors}
+                                </span>
+                            </p>
                         </div>
-                    </Menu.Button>
+                        <div>
+                            
+                        </div>
+                    </div>
                 </div>
-
-                <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                >
-                    <Menu.Items className="absolute left-0 z-10 mt-2 w-11/12 origin-top-right rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="py-1">
-                            {
-                                funds.map(fund => (
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <div
-                                                className={classNames(
-                                                active ? 'bg-gray-100 text-gray-900' : 'text-white',
-                                                'px-4 py-2 w-full font-bold text-xl text-start flex items-center space-x-4'
-                                                )}
-                                            >
-                                                <img src={fund.logo} alt="" />
-                                                <button>
-                                                    {fund.name}
-                                                </button>
-                                            </div>
-                                        )}
-                                    </Menu.Item>
-                                ))
-                            }
-                        </div>
-                    </Menu.Items>
-                </Transition>
-            </Menu>
+                <div>
+                    <p className='text-xl text-white'>
+                        <Trans>
+                            Portfolio Value
+                        </Trans>
+                    </p>
+                </div>
+            </div>
+            
         </div>
     );
 };
