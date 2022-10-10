@@ -43,20 +43,15 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/create-fund" element={<CreateFund />} />
-                  {/* <Route path="/fund/trading" element={<FundTrading />} /> */}
-                      
-                  <Route
-                    path="/fund/portfolio"
-                    element={
-                      <FundPortfolioManage />
-                    }
-                  />
-                  {/* <Route
-                    path="/fund/yield"
-                    element={
-                      <FundYield />
-                    }
-                  /> */}
+                  <Route path="/fund/trading" element={<FundTrading />} />
+                  {/* 
+              <Route
+                path="/fund/portfolio"
+                element={
+                  <FundPortfolio />
+                }
+              />*/}
+                  <Route path="/fund/yield" element={<FundYield />} />
                 </Routes>
               </div>
             </Router>
