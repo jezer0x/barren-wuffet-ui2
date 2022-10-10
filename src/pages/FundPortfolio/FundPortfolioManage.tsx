@@ -185,7 +185,7 @@ const FundPortfolioManage = () => {
     }, [presentFund, presentFundId]);
     return (
         <div className='container mx-auto my-20'>
-            <div className='bg-[#1c1b25] pt-10 px-8 rounded-xl'>
+            <div className='bg-[#1c1b25] pt-10 px-8 rounded-xl mx-5'>
                 <div className='grid grid-cols-2'>
                     <div className='space-y-6'>
                         <DropDownMenu
