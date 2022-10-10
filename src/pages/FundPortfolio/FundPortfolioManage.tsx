@@ -9,7 +9,6 @@ import qrCodeIcon from '../../img/icons/carbonQrCodeIcon.svg';
 import updateNowIcon from '../../img/icons/carbonUpdateNowIcon.svg';
 import telegramIcon from '../../img/icons/telegramYellowIcon.svg';
 import twitterIcon from '../../img/icons/twitterYellowIcon.svg';
-import { NavLink } from 'react-router-dom';
 import { numberWithCommas } from '../../data/formatting';
 
 interface fundType {
