@@ -41,6 +41,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({ handleFundSwitch, presentFu
                     <Menu.Items className="absolute left-0 z-10 mt-2 w-11/12 origin-top-right rounded-md bg-gray-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div className="py-1">
                             {
+                                // eslint-disable-next-line array-callback-return
                                 funds.map((fund: { id: React.Key | null | undefined; logo: string | undefined; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => {
                                     if (fund.id !== presentFundId) {
                                         return (
