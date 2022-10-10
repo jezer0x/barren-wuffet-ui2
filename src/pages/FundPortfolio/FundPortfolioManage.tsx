@@ -7,6 +7,10 @@ import { Trans } from '@lingui/macro';
 import copyIcon from '../../img/icons/carbonCopyIcon.svg';
 import qrCodeIcon from '../../img/icons/carbonQrCodeIcon.svg';
 import updateNowIcon from '../../img/icons/carbonUpdateNowIcon.svg';
+import telegramIcon from '../../img/icons/telegramYellowIcon.svg';
+import twitterIcon from '../../img/icons/twitterYellowIcon.svg';
+import { NavLink } from 'react-router-dom';
+import { numberWithCommas } from '../../data/formatting';
 
 interface fundType {
     id: number;
@@ -78,11 +82,11 @@ const funds = [
         logo: funConLogo,
         investors: 87,
         expiresIn: 677,
-        portfolioValue: 234567,
-        startingValue: 400,
-        dataUpdated: '1 min',
-        newlyAddedMoney: 2560.78,
-        upPercentage: 14.67,
+        portfolioValue: 459032,
+        startingValue: 700,
+        dataUpdated: '7 min',
+        newlyAddedMoney: 3511.78,
+        upPercentage: 23.67,
         wallet: 5643,
         walletAddress: '3423ff4r4gdD263q7QJtjudf739t9HV56b4vX324ffsdfs',
         assetBalances: [
@@ -124,11 +128,11 @@ const funds = [
         logo: netFineLogo,
         investors: 145,
         expiresIn: 952,
-        portfolioValue: 234567,
-        startingValue: 400,
-        dataUpdated: '1 min',
-        newlyAddedMoney: 2560.78,
-        upPercentage: 14.67,
+        portfolioValue: 314589,
+        startingValue: 340,
+        dataUpdated: '10 min',
+        newlyAddedMoney: 856.98,
+        upPercentage: 18.45,
         wallet: 6732,
         walletAddress: 'sdifnu43824339024kdfn20498ksdn2349ndfwf2',
         assetBalances: [
@@ -252,10 +256,10 @@ const FundPortfolioManage = () => {
                                 </button>
                             </div>
                         </div>
-                        <h2 className='text-white text-4xl mt-3'>${portfolioValue}</h2>
+                        <h2 className='text-white text-4xl mt-3'>${numberWithCommas(Number(portfolioValue))}</h2>
                         <p className='text-white text-xs mt-3'>
                             <Trans>
-                                Starting value: ${ startingValue }
+                                Starting value: ${numberWithCommas(Number(startingValue))}
                             </Trans>
                         </p>
                         <div className='flex justify-between items-center'>
@@ -271,7 +275,7 @@ const FundPortfolioManage = () => {
                             </div>
                             <div className='flex items-center space-x-6'>
                                 <p className='text-green-400 text-xs font-medium'>
-                                    +${ newlyAddedMoney }
+                                    +${ numberWithCommas(Number(newlyAddedMoney)) }
                                 </p>
                                 <p
                                     className='text-green-400 text-xs font-medium bg-green-900 bg-opacity-70 py-1 px-2 rounded-2xl'
@@ -280,6 +284,36 @@ const FundPortfolioManage = () => {
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                {/* Portfolio, Trading, Yield Buttons */}
+                <div className='flex items-center justify-between mt-10'>
+                    <div className='space-x-6'>
+                        <button className='text-yellow-400 bg-[#282835] font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700'>
+                            <Trans>
+                                PORTFOLIO
+                            </Trans>
+                        </button>
+                        <button className='text-white font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 border-t border-x border-gray-700'>
+                            <Trans>
+                                TRADING
+                            </Trans>
+                        </button>
+                        <button className='text-white font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 border-t border-x border-gray-700'>
+                            <Trans>
+                                YIELD
+                            </Trans>
+                        </button>
+                    </div>
+                    <div className='flex space-x-4 items-center'>
+                        <p className='text-yellow-400 font-bold text-lg mr-4'>Share</p>
+                        <button className='cursor-pointer'>
+                            <img src={telegramIcon} alt="" />
+                        </button>
+                        <button className='cursor-pointer'>
+                            <img src={twitterIcon} alt="" />
+                        </button>
                     </div>
                 </div>
             </div>
