@@ -64,7 +64,6 @@ export default function FundPortfolio() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
