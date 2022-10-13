@@ -42,8 +42,7 @@ const FundYield = () => {
 
   return (
     <div className="Exchange page-layout">
-      <FundBanner />
-      <div className="Exchange-content">
+      {/* <div className="Exchange-content">
         <div className="Exchange-left">
           <div className="ExchangeChart-top App-box App-box-border">
             <div className="ExchangeChart-top-inner">
@@ -78,7 +77,7 @@ const FundYield = () => {
         <div className="Exchange-lists small">
           <OrderList />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

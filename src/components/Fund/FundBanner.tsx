@@ -1,8 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import openSeaLogo from "../../img/fundLogos/openSeaLogo.png";
-import netFineLogo from "../../img/fundLogos/netFineLogo.png";
-import funConLogo from "../../img/fundLogos/funConLogo.png";
-import DropDownMenu from './DropDownMenu';
 import { Trans } from '@lingui/macro';
 import copyIcon from '../../img/icons/carbonCopyIcon.svg';
 import qrCodeIcon from '../../img/icons/carbonQrCodeIcon.svg';
@@ -11,50 +6,24 @@ import telegramIcon from '../../img/icons/telegramYellowIcon.svg';
 import twitterIcon from '../../img/icons/twitterYellowIcon.svg';
 import { numberWithCommas } from '../../data/formatting';
 import ListBox from './ListBox';
-
-interface fundType {
-    id: number;
-    name: string;
-    logo: string;
-    investors: number;
-    expiresIn: number;
-    portfolioValue: number;
-    startingValue: number;
-    dataUpdated: string;
-    newlyAddedMoney: number;
-    upPercentage: number;
-    wallet: number;
-    walletAddress: string;
-    assetBalances: object;
-    protocolBalances: object;
-}
+import { NavLink, useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function FundBanner(props: any) {
-  const { funds } = props;
-  const [presentFundId, setPresentFundId] = useState(funds[0].id);
-  const [presentFund, setPresentFund] = useState<fundType>(funds[0]);
+  const { funds, selected, setSelected } = props;
 
-  const { expiresIn, investors, walletAddress, portfolioValue, startingValue, dataUpdated, newlyAddedMoney, upPercentage, assetBalances, protocolBalances } = presentFund;
+  // select portfolio/trading/yield from fund manage
+  const [pty, setPty] = useState('portfolio');
+  const { expiresIn, investors, walletAddress, portfolioValue, startingValue, dataUpdated, newlyAddedMoney, upPercentage } = selected || {};
 
-  const handleFundSwitch = (id: React.SetStateAction<number>) => {
-      setPresentFundId(id)
-  }
-  useEffect(() => {
-      const filtered = funds.filter((fund: { id: any; }) => fund.id === presentFundId)
-      setPresentFund(filtered[0]);
-  }, [presentFund, presentFundId]);
   return (
     <div className='container mx-auto my-20'>
         <div className='bg-[#1c1b25] pt-10 px-8 rounded-xl mx-5'>
             <div className='grid grid-cols-2'>
                 <div className='space-y-6'>
-                    <DropDownMenu
-                        handleFundSwitch={handleFundSwitch}
-                        presentFund={presentFund}
-                        funds={funds}
-                        presentFundId={presentFundId}
-                    ></DropDownMenu>
                     <ListBox
+                      selected={selected}
+                      setSelected={setSelected}
                       funds={funds}
                     ></ListBox>
                     <div className='flex space-x-12'>
@@ -153,21 +122,27 @@ export default function FundBanner(props: any) {
             {/* Portfolio, Trading, Yield Buttons */}
             <div className='flex items-center justify-between mt-10'>
                 <div className='space-x-6'>
-                    <button className='text-yellow-400 bg-[#282835] font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700'>
-                        <Trans>
-                            PORTFOLIO
-                        </Trans>
-                    </button>
-                    <button className='text-white font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 border-t border-x border-gray-700'>
-                        <Trans>
-                            TRADING
-                        </Trans>
-                    </button>
-                    <button className='text-white font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 border-t border-x border-gray-700'>
-                        <Trans>
-                            YIELD
-                        </Trans>
-                    </button>
+                    <NavLink to='/fund/portfolio'>
+              <button onClick={() => setPty('portfolio')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'portfolio' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
+                          <Trans>
+                              PORTFOLIO
+                          </Trans>
+                      </button>
+                    </NavLink>
+                    <NavLink to='/fund/trading'>
+                      <button onClick={() => setPty('trading')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'trading' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
+                          <Trans>
+                              TRADING
+                          </Trans>
+                      </button>
+                    </NavLink>
+                    <NavLink to='/fund/yield'>
+                      <button onClick={() => setPty('yield')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'yield' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
+                          <Trans>
+                              YIELD
+                          </Trans>
+                      </button>
+                    </NavLink>
                 </div>
                 <div className='flex space-x-4 items-center'>
                     <p className='text-yellow-400 font-bold text-lg mr-4'>Share</p>

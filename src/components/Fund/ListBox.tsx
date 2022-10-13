@@ -1,21 +1,12 @@
 import React from 'react';
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 // import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import dropDownArrow from "../../img/icons/dropDownArrowGray.svg";
 
-const people = [
-  { name: 'Wade Cooper' },
-  { name: 'Arlene Mccoy' },
-  { name: 'Devon Webb' },
-  { name: 'Tom Cook' },
-  { name: 'Tanya Fox' },
-  { name: 'Hellen Schmidt' },
-]
 
 const ListBox = (props: any) => {
-    const { funds } = props;
-    const [selected, setSelected] = useState(funds[0])
+    const { funds, selected, setSelected } = props;
   
     return (
       <div className="relative">
@@ -37,32 +28,25 @@ const ListBox = (props: any) => {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute mt-1 max-h-60 w-3/5 overflow-auto rounded-md bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {funds.map((fund: any) => (
+                {funds?.map((fund: any) => (
                   <Listbox.Option
                     key={fund?.id}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-3 pr-4 ${
-                        active ? 'bg-amber-100 text-amber-900' : 'text-white'
+                      `relative cursor-default select-none py-2 pl-5 pr-4 text-white ${
+                        active ? 'bg-gray-500' : ''
                       }`
                     }
                     value={fund}
                   >
                     {({ selected }) => (
-                      <>
                         <div
-                          className={`truncate flex items-center text-lg space-x-3 ${
+                            className={`truncate flex items-center text-lg space-x-3 ${
                             selected ? 'font-bold' : 'font-normal'
-                          }`}
+                            }`}
                         >
-                          <img src={fund?.logo} alt="" />  
-                          <p>{fund?.name}</p>
+                            <img className='w-10' src={fund?.logo} alt="" />  
+                            <p>{fund?.name}</p>
                         </div>
-                        {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                            
-                          </span>
-                        ) : null}
-                      </>
                     )}
                   </Listbox.Option>
                 ))}

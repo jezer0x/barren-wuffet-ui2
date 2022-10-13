@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import FundBanner from '../../components/Fund/FundBanner';
 import openSeaLogo from "../../img/fundLogos/openSeaLogo.png";
 import netFineLogo from "../../img/fundLogos/netFineLogo.png";
 import funConLogo from "../../img/fundLogos/funConLogo.png";
-import DropDownMenu from '../../components/Fund/DropDownMenu';
-import { Trans } from '@lingui/macro';
-import copyIcon from '../../img/icons/carbonCopyIcon.svg';
-import qrCodeIcon from '../../img/icons/carbonQrCodeIcon.svg';
-import updateNowIcon from '../../img/icons/carbonUpdateNowIcon.svg';
-import telegramIcon from '../../img/icons/telegramYellowIcon.svg';
-import twitterIcon from '../../img/icons/twitterYellowIcon.svg';
-import { numberWithCommas } from '../../data/formatting';
+import btcImg from "../../img/icons/BTCIcon.svg";
+import ethImg from "../../img/icons/ETHIcon.svg";
+import curveImg from "../../img/icons/curveIcon.svg";
+import dopexImg from "../../img/icons/dopexIcon.svg";
 
 interface fundType {
     id: number;
@@ -46,34 +42,40 @@ const funds = [
         walletAddress: '8BMMk4gdD263q7QJt3VLWnG2x1mt9HV56b4vX774n4Sc',
         assetBalances: [
             {
-                asset: "BTC",
+                name: "Bitcoin",
+                shortName: "wBTC",
                 balance: 30,
                 dollarValue: 584991,
                 down: 2600,
                 percentage: 24.67,
+                img: btcImg, 
             },
             {
-                asset: "ETH",
+                name: "Ethereum",
+                shortName: "ETH",
                 balance: 40,
                 dollarValue: 811,
                 down: 500,
                 percentage: 13.97,
+                img: ethImg,
             },
         ],
         protocolBalances: [
             {
-                protocol: "Curve",
+                name: "Curve",
                 balance: 29,
                 dollarValue: 564,
                 down: 0,
                 percentage: 23.6,
+                img: curveImg,
             },
             {
-                protocol: "Dopex",
+                name: "Dopex",
                 balance: 46,
                 dollarValue: 2348,
                 down: 0,
                 percentage: 5,
+                img: dopexImg,
             },
         ],
     } as fundType,
@@ -172,12 +174,15 @@ const funds = [
 ] 
 
 const FundManage = () => {
+    const [selected, setSelected] = useState(funds[0])
     return (
         <div>
             <FundBanner
                 funds={funds}
+                selected={selected}
+                setSelected={setSelected}
             ></FundBanner>
-            <Outlet context={[funds]} />
+            <Outlet context={[selected]} />
         </div>
     );
 };
