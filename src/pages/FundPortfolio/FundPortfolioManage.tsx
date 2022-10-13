@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import openSeaLogo from "../../img/fundLogos/openSeaLogo.png";
 import netFineLogo from "../../img/fundLogos/netFineLogo.png";
 import funConLogo from "../../img/fundLogos/funConLogo.png";
-import DropDownMenu from '../../components/FundPortfolio/DropDownMenu';
+import DropDownMenu from '../../components/Fund/DropDownMenu';
 import { Trans } from '@lingui/macro';
 import copyIcon from '../../img/icons/carbonCopyIcon.svg';
 import qrCodeIcon from '../../img/icons/carbonQrCodeIcon.svg';
