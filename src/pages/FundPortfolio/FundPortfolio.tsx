@@ -4,8 +4,10 @@ import { ethers } from "ethers";
 import FundBanner from "../../components/Fund/FundBanner";
 import Footer from "../../components/Footer/Footer";
 import { Trans } from "@lingui/macro";
+import { useOutletContext } from "react-router-dom";
 
 export default function FundPortfolio() {
+  // const [num, my]: any = useOutletContext()
   const assetBalances = [
     {
       asset: "BTC",
@@ -29,7 +31,6 @@ export default function FundPortfolio() {
 
   return (
     <div className="Exchange page-layout">
-      <FundBanner />
       <div className="Exchange-content">
         <div className="Exchange-left">
           <div className="App-box App-box-border">

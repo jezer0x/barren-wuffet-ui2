@@ -60,7 +60,6 @@ const FundTrading = () => {
 
   return (
     <div className="Exchange page-layout">
-      <FundBanner />
       <div className="Exchange-content">
         <div className="Exchange-left">
           <PriceChart

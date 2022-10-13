@@ -29,148 +29,8 @@ interface fundType {
     protocolBalances: object;
 }
 
-const funds = [
-    {
-        id: 0,
-        name: "OpenSea Fund",
-        logo: openSeaLogo,
-        investors: 107,
-        expiresIn: 751,
-        portfolioValue: 234567,
-        startingValue: 400,
-        dataUpdated: '1 min',
-        newlyAddedMoney: 2560.78,
-        upPercentage: 14.67,
-        wallet: 8323,
-        walletAddress: '8BMMk4gdD263q7QJt3VLWnG2x1mt9HV56b4vX774n4Sc',
-        assetBalances: [
-            {
-                asset: "BTC",
-                balance: 30,
-                dollarValue: 584991,
-                down: 2600,
-                percentage: 24.67,
-            },
-            {
-                asset: "ETH",
-                balance: 40,
-                dollarValue: 811,
-                down: 500,
-                percentage: 13.97,
-            },
-        ],
-        protocolBalances: [
-            {
-                protocol: "Curve",
-                balance: 29,
-                dollarValue: 564,
-                down: 0,
-                percentage: 23.6,
-            },
-            {
-                protocol: "Dopex",
-                balance: 46,
-                dollarValue: 2348,
-                down: 0,
-                percentage: 5,
-            },
-        ],
-    } as fundType,
-    {
-        id: 1,
-        name: "FunCon Fund",
-        logo: funConLogo,
-        investors: 87,
-        expiresIn: 677,
-        portfolioValue: 459032,
-        startingValue: 700,
-        dataUpdated: '7 min',
-        newlyAddedMoney: 3511.78,
-        upPercentage: 23.67,
-        wallet: 5643,
-        walletAddress: '3423ff4r4gdD263q7QJtjudf739t9HV56b4vX324ffsdfs',
-        assetBalances: [
-            {
-                asset: "BTC",
-                balance: 30,
-                dollarValue: 584991,
-                down: 2600,
-                percentage: 24.67,
-            },
-            {
-                asset: "ETH",
-                balance: 40,
-                dollarValue: 811,
-                down: 500,
-                percentage: 13.97,
-            },
-        ],
-        protocolBalances: [
-            {
-                protocol: "Curve",
-                balance: 29,
-                dollarValue: 564,
-                down: 0,
-                percentage: 23.6,
-            },
-            {
-                protocol: "Dopex",
-                balance: 46,
-                dollarValue: 2348,
-                down: 0,
-                percentage: 5,
-            },
-        ],
-    } as fundType,
-    {
-        id: 3,
-        name: "NetFine",
-        logo: netFineLogo,
-        investors: 145,
-        expiresIn: 952,
-        portfolioValue: 314589,
-        startingValue: 340,
-        dataUpdated: '10 min',
-        newlyAddedMoney: 856.98,
-        upPercentage: 18.45,
-        wallet: 6732,
-        walletAddress: 'sdifnu43824339024kdfn20498ksdn2349ndfwf2',
-        assetBalances: [
-            {
-                asset: "BTC",
-                balance: 30,
-                dollarValue: 584991,
-                down: 2600,
-                percentage: 24.67,
-            },
-            {
-                asset: "ETH",
-                balance: 40,
-                dollarValue: 811,
-                down: 500,
-                percentage: 13.97,
-            },
-        ],
-        protocolBalances: [
-            {
-                protocol: "Curve",
-                balance: 29,
-                dollarValue: 564,
-                down: 0,
-                percentage: 23.6,
-            },
-            {
-                protocol: "Dopex",
-                balance: 46,
-                dollarValue: 2348,
-                down: 0,
-                percentage: 5,
-            },
-        ],
-    } as fundType,
-] 
-
 export default function FundBanner(props: any) {
+  const { funds } = props;
   const [presentFundId, setPresentFundId] = useState(funds[0].id);
   const [presentFund, setPresentFund] = useState<fundType>(funds[0]);
 
@@ -180,7 +40,7 @@ export default function FundBanner(props: any) {
       setPresentFundId(id)
   }
   useEffect(() => {
-      const filtered = funds.filter((fund) => fund.id === presentFundId)
+      const filtered = funds.filter((fund: { id: any; }) => fund.id === presentFundId)
       setPresentFund(filtered[0]);
   }, [presentFund, presentFundId]);
   return (
@@ -194,7 +54,9 @@ export default function FundBanner(props: any) {
                         funds={funds}
                         presentFundId={presentFundId}
                     ></DropDownMenu>
-                    <ListBox></ListBox>
+                    <ListBox
+                      funds={funds}
+                    ></ListBox>
                     <div className='flex space-x-12'>
                         <p className='text-xs font-medium text-gray-400'>
                             <Trans>
