@@ -6,7 +6,7 @@ import telegramIcon from '../../img/icons/telegramYellowIcon.svg';
 import twitterIcon from '../../img/icons/twitterYellowIcon.svg';
 import { numberWithCommas } from '../../data/formatting';
 import ListBox from './ListBox';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function FundBanner(props: any) {
