@@ -19,7 +19,6 @@ import Footer from "./components/Footer/Footer";
 import { getWalletConfig } from "./config/wallet";
 import { defaultLocale, dynamicActivate } from "./lib/i18n";
 import "./App.css";
-import FundPortfolioManage from "./pages/FundPortfolio/FundPortfolioManage";
 import FundManage from "./pages/FundManage/FundManage";
 
 const { chains, wagmiClient } = getWalletConfig();

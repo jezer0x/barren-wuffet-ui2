@@ -24,7 +24,7 @@ export default function FundBanner(props: any) {
                     <ListBox
                       selected={selected}
                       setSelected={setSelected}
-                      funds={funds}
+                      infos={funds}
                     ></ListBox>
                     <div className='flex space-x-12'>
                         <p className='text-xs font-medium text-gray-400'>

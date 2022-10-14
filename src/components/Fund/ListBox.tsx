@@ -6,7 +6,8 @@ import dropDownArrow from "../../img/icons/dropDownArrowGray.svg";
 
 
 const ListBox = (props: any) => {
-    const { funds, selected, setSelected } = props;
+  const { infos, selected, setSelected } = props;
+  const { logo, name } = selected || {};
   
     return (
       <div className="relative">
@@ -15,8 +16,8 @@ const ListBox = (props: any) => {
             <Listbox.Button className="w-3/5 rounded-2xl bg-black px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-orange-100">
                 <div className='flex justify-between'>
                     <div className='flex items-center space-x-2'>
-                        <img src={selected?.logo} alt="" />
-                        <p className='text-2xl font-bold'>{selected?.name}</p>
+                        { logo && <img src={logo} alt="" />}
+                        <p className='text-2xl font-bold'>{name}</p>
                     </div>
                     <img className='block' src={dropDownArrow} alt="" />
                 </div>
@@ -28,15 +29,15 @@ const ListBox = (props: any) => {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute mt-1 max-h-60 w-3/5 overflow-auto rounded-md bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {funds?.map((fund: any) => (
+                {infos?.map((info: any) => (
                   <Listbox.Option
-                    key={fund?.id}
+                    key={info?.id}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-5 pr-4 text-white ${
                         active ? 'bg-gray-500' : ''
                       }`
                     }
-                    value={fund}
+                    value={info}
                   >
                     {({ selected }) => (
                         <div
@@ -44,8 +45,8 @@ const ListBox = (props: any) => {
                             selected ? 'font-bold' : 'font-normal'
                             }`}
                         >
-                            <img className='w-10' src={fund?.logo} alt="" />  
-                            <p>{fund?.name}</p>
+                            { info?.logo && <img className='w-10' src={info?.logo} alt="" />   }
+                            <p>{info?.name}</p>
                         </div>
                     )}
                   </Listbox.Option>
