@@ -8,12 +8,13 @@ import { numberWithCommas } from '../../data/formatting';
 import ListBox from './ListBox';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import FundActionTab from './FundActionTab';
 
 export default function FundBanner(props: any) {
   const { funds, selected, setSelected } = props;
 
   // select portfolio/trading/yield from fund manage
-  const [pty, setPty] = useState('portfolio');
+  const [selectedFundAction, setSelectedFundAction] = useState('portfolio');
   const { expiresIn, investors, walletAddress, portfolioValue, startingValue, dataUpdated, newlyAddedMoney, upPercentage } = selected || {};
 
   return (
@@ -65,28 +66,6 @@ export default function FundBanner(props: any) {
                                 Portfolio Value
                             </Trans>
                         </p>
-                        <div className='space-x-2'>
-                            <button
-                                className='px-4 py-3 bg-black text-yellow-400 rounded-md text-xs cursor-pointer font-medium'
-                            >
-                                24H
-                            </button>
-                            <button
-                                className='px-4 py-3 bg-black text-white rounded-md text-xs cursor-pointer font-medium'
-                            >
-                                1D
-                            </button>
-                            <button
-                                className='px-4 py-3 bg-black text-white rounded-md text-xs cursor-pointer font-medium'
-                            >
-                                7D
-                            </button>
-                            <button
-                                className='px-4 py-3 bg-black text-white rounded-md text-xs cursor-pointer font-medium'
-                            >
-                                1M
-                            </button>
-                        </div>
                     </div>
                     <h2 className='text-white text-4xl mt-3'>${numberWithCommas(Number(portfolioValue))}</h2>
                     <p className='text-white text-xs mt-3'>
@@ -123,25 +102,25 @@ export default function FundBanner(props: any) {
             <div className='flex items-center justify-between mt-10'>
                 <div className='space-x-6'>
                     <NavLink to='/fund/portfolio'>
-              <button onClick={() => setPty('portfolio')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'portfolio' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
-                          <Trans>
-                              PORTFOLIO
-                          </Trans>
-                      </button>
+                        <FundActionTab
+                              selected={selectedFundAction}
+                              setSelected={setSelectedFundAction}
+                              text="PORTFOLIO"
+                        ></FundActionTab>
                     </NavLink>
                     <NavLink to='/fund/trading'>
-                      <button onClick={() => setPty('trading')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'trading' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
-                          <Trans>
-                              TRADING
-                          </Trans>
-                      </button>
+                        <FundActionTab
+                              selected={selectedFundAction}
+                              setSelected={setSelectedFundAction}
+                              text="TRADING"
+                        ></FundActionTab>
                     </NavLink>
                     <NavLink to='/fund/yield'>
-                      <button onClick={() => setPty('yield')} className={`font-semibold text-xl shadow-md px-14 py-3 rounded-t-xl hover:bg-gray-700 ${pty === 'yield' ? 'text-yellow-400 bg-[#282835]' : 'text-white border-t border-x border-gray-700'}`}>
-                          <Trans>
-                              YIELD
-                          </Trans>
-                      </button>
+                        <FundActionTab
+                              selected={selectedFundAction}
+                              setSelected={setSelectedFundAction}
+                              text="YIELD"
+                        ></FundActionTab>
                     </NavLink>
                 </div>
                 <div className='flex space-x-4 items-center'>

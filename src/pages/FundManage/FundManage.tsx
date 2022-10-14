@@ -8,25 +8,9 @@ import btcImg from "../../img/icons/BTCIcon.svg";
 import ethImg from "../../img/icons/ETHIcon.svg";
 import curveImg from "../../img/icons/curveIcon.svg";
 import dopexImg from "../../img/icons/dopexIcon.svg";
+import { FundType } from '../../api/models';
 
-interface fundType {
-    id: number;
-    name: string;
-    logo: string;
-    investors: number;
-    expiresIn: number;
-    portfolioValue: number;
-    startingValue: number;
-    dataUpdated: string;
-    newlyAddedMoney: number;
-    upPercentage: number;
-    wallet: number;
-    walletAddress: string;
-    assetBalances: object;
-    protocolBalances: object;
-}
-
-const funds = [
+const funds: FundType[] = [
     {
         id: 0,
         name: "OpenSea Fund",
@@ -74,7 +58,7 @@ const funds = [
                 img: dopexImg,
             },
         ],
-    } as fundType,
+    },
     {
         id: 1,
         name: "FunCon Fund",
@@ -122,7 +106,7 @@ const funds = [
                 img: dopexImg,
             },
         ],
-    } as fundType,
+    },
     {
         id: 3,
         name: "NetFine",
@@ -170,7 +154,7 @@ const funds = [
                 img: dopexImg,
             },
         ],
-    } as fundType,
+    },
 ] 
 
 const FundManage = () => {
