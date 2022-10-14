@@ -60,7 +60,7 @@ const FundTrading = () => {
 
   return (
     <div className="Exchange page-layout">
-      {/* <div className="Exchange-content">
+      <div className="Exchange-content">
         <div className="Exchange-left">
           <PriceChart
             title={"USD/ETH"}
@@ -75,7 +75,7 @@ const FundTrading = () => {
         <div className="Exchange-right">
           <SwapBox tokens={tokens} />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
