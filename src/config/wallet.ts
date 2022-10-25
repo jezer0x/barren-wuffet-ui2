@@ -6,7 +6,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { isDevelopment } from "./env";
 
 export function getWalletConfig() {
-  const devChains = [chain.arbitrumGoerli];
+
+  const devChains = [chain.arbitrumGoerli, chain.localhost];
 
   const { chains, provider } = configureChains(
     [chain.arbitrum, chain.mainnet].concat(isDevelopment() ? devChains : []),
