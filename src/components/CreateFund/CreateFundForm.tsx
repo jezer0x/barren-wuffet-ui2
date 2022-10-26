@@ -20,7 +20,6 @@ import { Abi as AbiType } from "abitype";
 import { BigNumber, ethers } from "ethers";
 import { ERC20_DECIMALS } from "../../config/constants";
 import { getEthToken } from "../../config/tokens";
-import { getTokenSourceMapRange } from "typescript";
 
 const TELEGRAM_PREFIX = "https://t.me/";
 const TWITTER_PREFIX = "https://twitter.com/";
@@ -41,8 +40,6 @@ const CreateFundForm: FunctionComponent = () => {
     new Date(new Date().getTime() + 86400000 * 10)
   );
   const [fees, setFees] = useState(1);
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { chain } = useNetwork();
 
@@ -93,8 +90,6 @@ const CreateFundForm: FunctionComponent = () => {
   };
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    console.log(write);
     write?.();
   };
 
