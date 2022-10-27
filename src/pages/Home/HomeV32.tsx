@@ -1,7 +1,7 @@
 import React from "react";
 import { FunctionComponent } from "react";
 import styles from "./HomeV32.module.css";
-import { t, Trans } from "@lingui/macro";
+import { t } from "@lingui/macro";
 import { NavLink } from "react-router-dom";
 import FundsList from "../../components/Fund/FundsList";
 import Button from "../../components/Button/Button";

@@ -15,15 +15,13 @@ import Table from "../Table/Table";
 import useSWR from "swr";
 import { Fund, FundStatus } from "../../api/models";
 import { api } from "../../config/env";
-import openSeaLogo from "../../img/fundLogos/openSeaLogo.png"
 import upIcon from "../../img/icons/upIcon.svg";
 import downIcon from "../../img/icons/downIcon.svg";
 import Button from "../Button/Button";
 import BorderlessButton from "../Button/BorderlessButton";
 
 
-const GenericColumn = (props: any) => {
-  let returnElement = <div></div>
+const GenericColumn = (props: {type?: string, status?: string, label?: string, changedPercent?: number, logo?: string, name?: string, row?: any, text?: string}) => {
   switch (props.type) {
     case "status":
       return <>
@@ -31,21 +29,13 @@ const GenericColumn = (props: any) => {
           {props.status}
         </p>
       </>
-    case "primaryBtn":
-      return <>
-        <Button {...props} label={props.label} />
-      </>
-    case "borderlessBtn":
-      return <>
-        <BorderlessButton {...props} label={props.label} />
-      </>
     case "changePercent":
       return <>
         <div className="flex items-center justify-between space-x-4">
           <p className="font-bold">
-            {Math.abs(props.changedPercent)}
+            {Math.abs(props.changedPercent || 0)}
           </p>
-          <img className={`${props.changedPercent >= 0 ? 'bg-[#072213]' : 'bg-[#301616]'} p-1.5 rounded-full`} src={props.changedPercent >= 0 ? upIcon : downIcon} alt="" />
+          <img className={`${props.changedPercent || 0 >= 0 ? 'bg-[#072213]' : 'bg-[#301616]'} p-1.5 rounded-full`} src={props.changedPercent || 0 >= 0 ? upIcon : downIcon} alt="" />
         </div>
       </>
     case "name":
@@ -133,10 +123,9 @@ const columns: ColumnDef<Fund, any>[] = [
       const status = row.getValue("status");
       if (status === FundStatus.RAISING) {
         return (
-          <GenericColumn 
+          <Button
             onClick={() => investInFund(row.getValue("id"))}
             disabled = { false}
-            type="primaryBtn"
             label={t`Invest`}
           />
         );
@@ -147,7 +136,7 @@ const columns: ColumnDef<Fund, any>[] = [
         return <></>;
       } else if (status === FundStatus.DEPLOYED) {
         return (
-          <GenericColumn label="See Investment" type="borderlessBtn" />
+          <BorderlessButton label="See Investment" />
         );
       }
     },
