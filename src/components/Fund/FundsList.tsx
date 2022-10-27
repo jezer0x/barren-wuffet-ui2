@@ -1,3 +1,4 @@
+/* eslint-disable no-self-compare */
 import React, { useEffect } from "react";
 
 import { t } from "@lingui/macro";
