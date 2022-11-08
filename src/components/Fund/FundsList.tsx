@@ -1,160 +1,114 @@
-/* eslint-disable no-self-compare */
 import React from "react";
 
-import { t } from "@lingui/macro";
+// import { Trans, t } from "@lingui/macro";
 
 import {
   createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
   Row,
   ColumnDef,
-  RowSelection,
 } from "@tanstack/react-table";
 
-import { formatDate } from "../../data/formatting";
+import { formatAmount, formatDate, USD_DECIMALS } from "../../data/formatting";
 import Table from "../Table/Table";
-import { useQuery } from "@tanstack/react-query";
+import useSWR from "swr";
 import { Fund, FundStatus } from "../../api/models";
 import { api } from "../../config/env";
-import Button from "../Button/Button";
-import BorderlessButton from "../Button/BorderlessButton";
-import { GenericColumn } from "../Table/GenericColumn";
-import Checkbox from "../Form/Checkbox";
 
 const columnHelper = createColumnHelper<Fund>();
 
 const columns: ColumnDef<Fund, any>[] = [
-  columnHelper.accessor("name", {
-    header: t`Name`,
-    cell: (info) => (
-      <GenericColumn name={info.getValue()} logo="" type="name" />
-    ),
+  columnHelper.accessor((row) => row.id, {
+    header: `Name`,
   }),
   columnHelper.accessor("creation_timestamp", {
-    header: t`Start Date`,
-    cell: (info) => <GenericColumn text={formatDate(info.getValue())} />,
+    header: `Start Date`,
+    cell: (info) => formatDate(info.getValue()),
   }),
   columnHelper.accessor("close_timestamp", {
-    header: t`Maturity Date`,
-    cell: (info) => <GenericColumn text={formatDate(info.getValue())} />,
+    header: `Maturity Date`,
+    cell: (info) => formatDate(info.getValue()),
   }),
   columnHelper.accessor("change_percent", {
-    header: t`Change %`,
-    cell: (info) => (
-      <GenericColumn
-        changedPercent={
-          info.getValue() ? Math.round(info.getValue() * 10000) / 100 : 0
-        }
-        type="changePercent"
-      />
-    ),
+    header: `Change %`,
+    cell: (info) =>
+      info.getValue() ? (
+        `${Math.round(info.getValue() * 10000) / 100}%`
+      ) : (
+        <span>&#8212;</span>
+      ),
   }),
-  columnHelper.accessor((row) => row, {
-    header: t`Amount Raised`,
-    cell: (info) => (
-      <GenericColumn
-        amount={info.getValue().amount_raised}
-        changedPercent={info.getValue().change_percent}
-        type="amount"
-      />
-    ),
+  columnHelper.accessor("amount_raised", {
+    header: `Amount Raised`,
+    cell: (info) => formatAmount(info.getValue(), USD_DECIMALS, 2, true, "0.0"),
   }),
   columnHelper.accessor("investor_count", {
-    header: t`Investors`,
+    header: `Investors`,
   }),
   columnHelper.accessor("deploy_timestamp", {
-    header: t`Fund Raising End Date`,
-    cell: (info) => <GenericColumn text={formatDate(info.getValue())} />,
+    header: `Fund Raising End Date`,
+    cell: (info) => formatDate(info.getValue()),
   }),
   columnHelper.accessor("admin_fee", {
-    header: t`Admin Fee`,
-    cell: (info) => <GenericColumn amount={info.getValue()} type="percent" />,
+    header: `Admin Fee`,
   }),
   columnHelper.accessor("status", {
-    header: t`Status`,
-    cell: (info) => (
-      <GenericColumn
-        status={FundStatus[info.getValue()].toLowerCase()}
-        type="status"
-      />
-    ),
+    header: `Status`,
+    cell: (info) => FundStatus[info.getValue()],
   }),
   columnHelper.accessor("manager", {
-    header: t`Manager`,
-    cell: (info) => info.getValue(),
+    header: `Manager`,
+    cell: (info) => FundStatus[info.getValue()],
   }),
-];
-
-const linkAction = columnHelper.display({
-  id: "action",
-  header: t`Action`,
-  cell: ({ row }: { row: Row<Fund> }) => {
-    const status = row.original.status;
-    if (status === FundStatus.RAISING) {
-      return (
-        <Button
-          onClick={() => investInFund(row.original.id)}
-          disabled={false}
-          label={t`Invest`}
-        />
-      );
-    } else if (status === FundStatus.CLOSED || status === FundStatus.CLOSABLE) {
-      return <></>;
-    } else if (status === FundStatus.DEPLOYED) {
-      return <BorderlessButton label={t`See Investment`} />;
-    }
+  {
+    id: "action",
+    header: `Action`,
+    cell: ({ row }: { row: Row<Fund> }) => {
+      const status = row.getValue("status");
+      if (status === FundStatus.RAISING) {
+        return (
+          <button
+            onClick={() => investInFund(row.getValue("id"))}
+            disabled={false}
+          >
+            INVEST
+            {/* <Trans></Trans> */}
+          </button>
+        );
+      } else if (
+        status === FundStatus.CLOSED ||
+        status === FundStatus.CLOSABLE
+      ) {
+        return <></>;
+      } else if (status === FundStatus.DEPLOYED) {
+        return (
+          <div>
+            See Investment
+            {/* <Trans>See Investment</Trans> */}
+          </div>
+        );
+      }
+    },
   },
-});
+];
 
 function investInFund(fundId: string): void {
   throw new Error("Function not implemented.");
 }
 
 export default function FundsList() {
-  const { data, error } = useQuery<Fund[] | undefined, string>(
-    ["funds"],
-    api.getFunds.bind(api)
-  );
+  const { data, error } = useSWR("/api/funds", api.getFunds);
 
-  return (
-    <div className="container mx-auto">
-      <Table columns={columns.concat(linkAction)} data={data} error={error} />
-    </div>
-  );
-}
-
-export function SelectFundsList(props: {
-  selectedFundId?: string;
-  setSelectedFundId: (fundId?: string) => void;
-}) {
-  const { selectedFundId, setSelectedFundId } = props;
-  const { data, error } = useQuery<Fund[] | undefined, string>(
-    ["funds"],
-    api.getFunds.bind(api)
-  );
-
-  const selectAction = columnHelper.display({
-    id: "select",
-    header: t`Select`,
-    cell: ({ row }: { row: Row<Fund> }) => {
-      const isSelected = row.original.id === selectedFundId;
-
-      return (
-        <Checkbox
-          isChecked={isSelected}
-          setIsChecked={() => {
-            isSelected
-              ? setSelectedFundId(undefined)
-              : setSelectedFundId(row.original.id);
-          }}
-          label={""}
-        />
-      );
-    },
+  const table = useReactTable<Fund>({
+    data: data || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    <div className="container mx-auto">
-      <Table columns={columns.concat(selectAction)} data={data} error={error} />
+    <div className="p-2">
+      <Table table={table} error={error} />
     </div>
   );
 }

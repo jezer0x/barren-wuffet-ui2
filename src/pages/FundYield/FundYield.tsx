@@ -1,22 +1,19 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { t } from "@lingui/macro";
+import React, { FunctionComponent, useState } from "react";
+// import { t } from "@lingui/macro";
 import { useNetwork } from "wagmi";
 
 import { getTokens } from "../../config/tokens";
 
-import SwapBox from "../../components/SwapBox/SwapBox";
+import SwapBox from "../../components/Fund/SwapBox";
+import FundBanner from "../../components/Fund/FundBanner";
 import ActionSelector from "../../components/Fund/ActionSelector";
-import TradingOrders from "../../components/Fund/OpenOrders";
+import TradingOrders from "../../components/Fund/TradingOrders";
 import Tabs from "../../components/Tabs/Tabs";
 
 import { Action, ActionTypes } from "../../config/actions";
 import PoolsList from "../../components/Fund/PoolsList";
 
 const FundYield = () => {
-  useEffect(() => {
-    document.title = "Barren Wuffet | Fund Yield";
-  }, []);
-
   const { chain } = useNetwork();
   const [actionToPerform, setActionToPerform] = useState<Action>();
 
@@ -29,11 +26,11 @@ const FundYield = () => {
           <Tabs
             options={[
               {
-                label: t`Positions`,
+                label: `Positions`,
                 content: <TradingOrders />,
               },
               {
-                label: t`Orders`,
+                label: `Orders`,
                 content: <div>Orders stuff</div>,
               },
             ]}
@@ -44,8 +41,9 @@ const FundYield = () => {
   };
 
   return (
-    <div className="container mx-auto">
-      <div className="mx-5 mb-10 rounded-xl px-8 py-12 bg-gray-dark text-white">
+    <div className="Exchange page-layout">
+      <FundBanner />
+      <div className="Exchange-content">
         <div className="Exchange-left">
           <div className="ExchangeChart-top App-box App-box-border">
             <div className="ExchangeChart-top-inner">

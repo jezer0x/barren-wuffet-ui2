@@ -2,7 +2,7 @@ import { Fund, FundStatus } from "../../api/models";
 
 export const funds: Fund[] = [
   {
-    id: "0x641162c1ee009e544031aF1157E6fc608edB4e01",
+    id: "1",
     name: "Raising Fund",
     manager: "0x123",
     amount_raised: 0,
@@ -12,6 +12,7 @@ export const funds: Fund[] = [
     close_timestamp: undefined,
     creation_timestamp: new Date(2022, 10, 1),
     subscriptions: ["abc"],
+    actions: ["abc"],
     rules: ["abc"],
     positions: ["abc"],
     investor_count: 2,
@@ -27,6 +28,7 @@ export const funds: Fund[] = [
     close_timestamp: new Date(2022, 9, 12),
     creation_timestamp: new Date(2022, 4, 1),
     subscriptions: ["abc"],
+    actions: ["abc"],
     rules: ["abc"],
     positions: ["abc"],
     change_percent: 0.2,
@@ -43,6 +45,7 @@ export const funds: Fund[] = [
     close_timestamp: new Date(2022, 9, 12),
     creation_timestamp: new Date(2022, 4, 1),
     subscriptions: ["abc"],
+    actions: ["abc"],
     rules: ["abc"],
     positions: ["abc"],
     change_percent: -0.3,

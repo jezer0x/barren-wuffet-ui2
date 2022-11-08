@@ -1,5 +1,5 @@
 import React from "react";
-import { t } from "@lingui/macro";
+// import { t } from "@lingui/macro";
 
 import logoImg from "../../img/logo_bw_sq.svg";
 import twitterIcon from "../../img/ic_twitter.svg";
@@ -13,7 +13,7 @@ const appLinks = [
   // { text: t`Terms & conditions`, link: "/terms-and-conditions" },
   // { text: t`About`, link: "/about" },
   // { text: t`Referral Terms`, link: "/referral-terms" },
-  { text: t`Blog`, link: "https://www.jezer0x.com/", external: true },
+  { text: `Blog`, link: "https://www.jezer0x.com/", external: true },
 ];
 
 const socialLinks = [

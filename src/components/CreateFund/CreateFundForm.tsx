@@ -1,35 +1,23 @@
-import { FunctionComponent, useEffect, useMemo, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import telegramIcon from "../../img/icons/telegramYellowIcon.svg";
 import twitterIcon from "../../img/icons/twitterYellowIcon.svg";
 import discordIcon from "../../img/icons/discordYellowIcon.svg";
+import calendarIcon from "../../img/icons/calendarYellowIcon.svg";
 import percentageIcon from "../../img/icons/parcentageYellowIcon.svg";
-import { Trans, t } from "@lingui/macro";
+// import { Trans, t } from "@lingui/macro";
 
 import Error from "../ui/Error";
 import { Link } from "react-router-dom";
 import { Input } from "../Form/Input";
-import Button from "../Button/Button";
+import Button from "../Form/Button";
 import { TextArea } from "../Form/TextArea";
-import MultiSelector from "../Form/MultiSelector";
-import { useConnectAndWrite, usePrepareCreateFund } from "../../api/rpc";
-import { useAccount } from "wagmi";
+import { formatDate } from "../../data/formatting";
 
 const TELEGRAM_PREFIX = "https://t.me/";
 const TWITTER_PREFIX = "https://twitter.com/";
 const DISCORD_PREFIX = "https://discord.gg/";
 
-const TOMORROW = new Date(new Date().getTime() + 86400000);
-const AFTER_30_DAYS = new Date(TOMORROW.getTime() + 86400000 * 29);
-
-const handleSocialFn = (prefix: string) => {
-  return (value: string) => {
-    if (value.startsWith(prefix)) {
-      return value;
-    }
-    return prefix + value;
-  };
-};
-
+type Event = { target: { value: string } };
 const CreateFundForm: FunctionComponent = () => {
   const [telegram, setTelegram] = useState(TELEGRAM_PREFIX);
   const [twitter, setTwitter] = useState(TWITTER_PREFIX);
@@ -38,109 +26,70 @@ const CreateFundForm: FunctionComponent = () => {
   const [about, setAbout] = useState("");
   const [strategy, setStrategy] = useState("");
   const [amountRaised, setAmountRaised] = useState(10000);
-  const [closeDate, setCloseDate] = useState(TOMORROW);
-  const [lockin, setLockin] = useState(AFTER_30_DAYS);
+  const [closeDate, setCloseDate] = useState(new Date("2022-10-20"));
   const [fees, setFees] = useState(1);
-  const [isSaving, setIsSaving] = useState(false);
-  const [fundId, setFundId] = useState<string>("");
-  const { isConnected } = useAccount();
 
-  const { isLoading, error, isSuccess, write } = usePrepareCreateFund({
-    fundName,
-    closeDate,
-    lockin,
-    fees,
-    amountRaised,
-    eventCallback: ({ owner, fund, name }) => {
-      setFundId(fund || "");
-      console.log(`Owner: ${owner}, Fund Address: ${fund}, Fund Name: ${name}`);
-    },
-  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  useConnectAndWrite(isSaving, setIsSaving, write);
-
-  const handleTelegram = (v: string) => {
-    setTelegram(handleSocialFn(TELEGRAM_PREFIX)(v));
-  };
-  const handleTwitter = (v: string) => {
-    setTwitter(handleSocialFn(TWITTER_PREFIX)(v));
-  };
-  const handleDiscord = (v: string) => {
-    setDiscord(handleSocialFn(DISCORD_PREFIX)(v));
+  const handleSocialFn = (prefix: string) => {
+    return (e: Event) => {
+      const value = e.target.value;
+      if (value.startsWith(prefix)) {
+        return value;
+      }
+      return prefix + value;
+    };
   };
 
-  const handleAmountRaised = (val: number) => {
-    val && val > 0 && setAmountRaised(val);
+  const handleTelegram = (e: Event) => {
+    setTelegram(handleSocialFn(TELEGRAM_PREFIX)(e));
   };
-
-  const handleCloseDate = (newDate: Date) => {
-    if (
-      newDate.getTime() > new Date().getTime() &&
-      newDate.getTime() < lockin.getTime()
-    ) {
-      setCloseDate(newDate);
-    }
+  const handleTwitter = (e: Event) => {
+    setTwitter(handleSocialFn(TWITTER_PREFIX)(e));
   };
-
-  const handleLockin = (newDate: Date) => {
-    if (
-      newDate.getTime() > new Date().getTime() &&
-      newDate.getTime() > closeDate.getTime()
-    ) {
-      setLockin(newDate);
-    }
+  const handleDiscord = (e: Event) => {
+    setDiscord(handleSocialFn(DISCORD_PREFIX)(e));
   };
-
-  const handleFees = (val: number) => {
-    setFees(val < 100 && val >= 0 ? val : 0);
-  };
-
   const handleFormSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setIsSaving(true);
+    setIsSubmitted(true);
+    setError("");
   };
-
   return (
-    <div className="bg-gray-dark mt-10 py-20 px-14 rounded-2xl shadow-xl text-white mx-6">
-      <CreateFundThanks isHidden={!isSuccess} fundId={fundId} />
-      <div className={!isSuccess ? "" : "hidden"}>
+    <div className="bg-[#1c1b25] mt-10 py-20 px-14 rounded-2xl shadow-xl text-white mx-6">
+      <CreateFundThanks isHidden={!isSubmitted} />
+      <div className={isSubmitted ? "hidden" : ""}>
         <form onSubmit={handleFormSubmit}>
-          {isSaving && isConnected && !write && (
-            <Error
-              error={
-                "Unable to send transaction to network. This could be an error in your wallet settings or the data being sent to the network"
-              }
-            />
-          )}
-          {(isSaving || isLoading) && <div>Submitting form..</div>}
-          {error && <Error error={error.message} />}
+          {error && <Error error={error} />}
           <p className="text-lg font-bold">
-            <Trans>Information about your fund</Trans>
+          Information about your fund
+            {/* <Trans>Information about your fund</Trans> */}
           </p>
           <div className="mt-4 space-y-3">
             <Input
               type="text"
-              name={t`Fund Name`}
+              name={`Fund Name`}
               id="fundName"
               value={fundName}
-              onChange={setFundName}
-              placeholder={t`Your Fund Name`}
+              onChange={(e) => setFundName(e.target.value)}
+              placeholder={`Your Fund Name`}
               required
             />
             <TextArea
-              name={t`About This Fund`}
+              name={`About This Fund`}
               id="about"
               value={about}
-              placeholder={t`About`}
+              placeholder={`About`}
               required
-              onChange={setAbout}
+              onChange={(e) => setAbout(e.target.value)}
             />
             <TextArea
-              name={t`Fund Strategy`}
+              name={`Fund Strategy`}
               id="strategy"
               value={strategy}
-              onChange={setStrategy}
-              placeholder={t`Strategy`}
+              onChange={(e) => setStrategy(e.target.value)}
+              placeholder={`Strategy`}
               required
             />
             <div className="flex justify-between space-x-8">
@@ -149,9 +98,9 @@ const CreateFundForm: FunctionComponent = () => {
                 icon={telegramIcon}
                 value={telegram}
                 type="text"
-                name={t`Telegram Username`}
+                name={`Telegram Username`}
                 id="telegram"
-                placeholder={t`Telegram`}
+                placeholder={`Telegram`}
                 required
               />
 
@@ -160,9 +109,9 @@ const CreateFundForm: FunctionComponent = () => {
                 icon={twitterIcon}
                 value={twitter}
                 type="text"
-                name={t`Twitter Username`}
+                name={`Twitter Username`}
                 id="twitter"
-                placeholder={t`Twitter`}
+                placeholder={`Twitter`}
                 required
               />
 
@@ -171,73 +120,61 @@ const CreateFundForm: FunctionComponent = () => {
                 icon={discordIcon}
                 value={discord}
                 type="text"
-                name={t`Discord Username`}
+                name={`Discord Username`}
                 id="discord"
-                placeholder={t`Discord Username`}
+                placeholder={`Discord Username`}
                 required
               />
             </div>
           </div>
           <p className="text-white mt-8 text-lg font-bold">
-            <Trans>Fund Setting</Trans>
+            Fund Setting
+            {/* <Trans>Fund Setting</Trans> */}
           </p>
           <div className="mt-4 space-y-3">
             <Input
               type="number"
-              name={t`Amount to be Raised for This Fund`}
+              name={`Amount to be Raised for This Fund`}
               id="amountRaised"
               value={amountRaised}
-              placeholder={t`Amounts being raised $`}
-              onChange={handleAmountRaised}
+              placeholder={`Amounts being raised $`}
+              onChange={(e) => setAmountRaised(parseFloat(e.target.value))}
               required
             />
             <div className="flex justify-between space-x-8">
               <Input
                 type="date"
-                value={lockin}
-                name={t`Withdrawal Date from the fund`}
-                id="lockin"
-                placeholder={t`Fund withdrawal date`}
-                onChange={handleLockin}
-                required
-              />
-              <Input
-                type="date"
-                value={closeDate}
-                name={t`Closing Date of the Fund`}
+                icon={calendarIcon}
+                value={formatDate(closeDate)}
+                name={`Closing Date of the Fund`}
                 id="durationOfRaise"
-                placeholder={t`Duration of raise`}
-                onChange={handleCloseDate}
+                placeholder={`Duration of raise`}
+                onChange={(e) => {
+                  const newDate = new Date(e.target.value);
+                  if (newDate.getTime() > new Date().getTime()) {
+                    setCloseDate(newDate);
+                  }
+                }}
                 required
               />
               <Input
                 type="number"
                 icon={percentageIcon}
                 value={fees}
-                name={t`Fund Fees`}
+                name={`Fund Fees`}
                 id="fees"
-                placeholder={t`Fees`}
-                onChange={handleFees}
+                placeholder={`Fees`}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  setFees(val < 100 && val >= 0 ? val : 0);
+                }}
                 required
-              />
-            </div>
-            <div className="flex justify-between space-x-8">
-              <MultiSelector
-                label={t`Whitelist tokens`}
-                items={[
-                  { id: 1, name: "ETH" },
-                  { id: 2, name: "SUSHI" },
-                  { id: 3, name: "UNI" },
-                  { id: 4, name: "CRV" },
-                  { id: 5, name: "DPX" },
-                  { id: 6, name: "RDPX" },
-                ]}
               />
             </div>
           </div>
 
           <div className="flex justify-center mt-10">
-            <Button type="submit" label={t`Create Fund`} />
+            <Button type="submit" label={`Create Fund`} />
           </div>
         </form>
       </div>
@@ -245,28 +182,33 @@ const CreateFundForm: FunctionComponent = () => {
   );
 };
 
-function CreateFundThanks(props: { isHidden: boolean; fundId: string }) {
-  const { isHidden, fundId } = props;
+function CreateFundThanks(props: { isHidden: boolean }) {
+  const { isHidden } = props;
   return (
     <div className={isHidden ? "hidden" : ""}>
       <div>
         <p className="text-6xl text-center py-2">🎉</p>
         <p className="mt-4 text-center text-xl py-1.5 rounded-md font-medium bg-green-800 bg-opacity-40">
-          ✅ <Trans>Thank you! Your Fund ({fundId}) was created!</Trans>
+          ✅ Thank you! Your Fund was created!
+           {/* <Trans>Thank you! Your Fund was created!</Trans> */}
         </p>
       </div>
       <div className="mt-14">
-        <Link to={`/fund/${fundId}/portfolio`}>
-          <Button label={t`START TRADING`} />
+        <Link to="/fund/portfolio">
+          <Button label={`START TRADING`} />
         </Link>
       </div>
       <div className="mt-4 text-gray-500 text-center">
-        <Trans>
+        If you are a trader, raise capital easily and scale up your investment
+          and trading strategies. Decide on the fund size, the duration of
+          management and the profit share amounts. Market it to your community
+          and help them increase their returns.
+        {/* <Trans>
           If you are a trader, raise capital easily and scale up your investment
           and trading strategies. Decide on the fund size, the duration of
           management and the profit share amounts. Market it to your community
           and help them increase their returns.
-        </Trans>
+        </Trans> */}
       </div>
     </div>
   );

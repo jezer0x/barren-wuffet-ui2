@@ -1,12 +1,13 @@
 import { Disclosure, Transition } from "@headlessui/react";
-import { Trans } from "@lingui/macro";
+// import { Trans } from "@lingui/macro";
 
 const FAQ = ({ faqs }: { faqs: { q: string; a: string }[] }) => (
-  <div className="my-4">
-    {faqs.map((faq, i) => (
-      <Disclosure as="div" key={`faq-{i}`}>
+  <>
+    {faqs.map((faq) => (
+      <Disclosure as="div" key={faq.q}>
         <Disclosure.Button className="py-2">
-          <Trans>{faq.q}</Trans>
+        {faq.q}
+          {/* <Trans>{faq.q}</Trans> */}
         </Disclosure.Button>
         <Transition
           enter="transition duration-100 ease-out"
@@ -16,13 +17,14 @@ const FAQ = ({ faqs }: { faqs: { q: string; a: string }[] }) => (
           leaveFrom="transform scale-100 opacity-100"
           leaveTo="transform scale-95 opacity-0"
         >
-          <Disclosure.Panel className="text-gray-300">
-            <Trans>{faq.a}</Trans>
+          <Disclosure.Panel className="text-gray-500">
+          {faq.a}
+            {/* <Trans>{faq.a}</Trans> */}
           </Disclosure.Panel>
         </Transition>
       </Disclosure>
     ))}
-  </div>
+  </>
 );
 
 export default FAQ;

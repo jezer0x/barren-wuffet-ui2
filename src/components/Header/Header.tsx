@@ -4,8 +4,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import logo from "../../img/logo.svg";
 
 import { NavLink } from "react-router-dom";
-import { t, Trans } from "@lingui/macro";
-import Button from "../Button/Button";
+// import { t, Trans } from "@lingui/macro";
+import Button from "../Form/Button";
 
 export default function Header() {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -69,27 +69,24 @@ export default function Header() {
             >
               <li>
                 <NavLink className="block hover:text-orange-400" to="/about">
-                  <Trans>About</Trans>
+                  About
+                  {/* <Trans>About</Trans> */}
                 </NavLink>
               </li>
               <li>
                 <NavLink className="block hover:text-orange-400" to="/blog">
-                  <Trans>Blog</Trans>
+                  Blog
+                  {/* <Trans>Blog</Trans> */}
                 </NavLink>
               </li>
               <li>
                 <NavLink className="block" to="/fund/portfolio">
-                  <Button label={t`Manage Fund`} />
-                </NavLink>
-              </li>
-              <li>
-                <NavLink className="block" to="/invest">
-                  <Button label={t`Invest`} />
+                  <Button label={`Invest`} />
                 </NavLink>
               </li>
               <li>
                 <NavLink className="block" to="/create-fund">
-                  <Button label={t`Create Fund`} />
+                  <Button label={`Create Fund`} />
                 </NavLink>
               </li>
               <li>

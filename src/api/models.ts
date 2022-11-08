@@ -17,74 +17,16 @@ export interface Fund {
   creation_timestamp: Date;
   close_timestamp?: Date | null;
   deploy_timestamp: Date;
-  rules: string[];
   amount_raised: number;
   admin_fee: number;
   status: FundStatus;
   subscriptions: string[];
+  actions: string[];
+  rules: string[];
   positions: string[];
   change_percent?: number;
   investor_count?: number;
 }
-
-export interface FundType {
-  id: number;
-  name: string;
-  logo: string;
-  investors: number;
-  expiresIn: number;
-  portfolioValue: number;
-  startingValue: number;
-  dataUpdated: string;
-  newlyAddedMoney: number;
-  upPercentage: number;
-  wallet: number;
-  walletAddress: string;
-  assetBalances: object;
-  protocolBalances: object;
-}
-
-export enum TradeOptions {
-  LIMIT = "limit",
-  OCO = "oco",
-  TRAILING_STOP = "trailing_stop",
-  LIMIT_TRIGGER = "limit_trigger",
-}
-
-export interface Order {
-  platform: string;
-  position: string;
-  trigger_type: TradeOptions;
-  collateral: number;
-  limit_price?: number;
-  fill_price?: number;
-  creation_timestamp: Date;
-  expiry_timestamp: Date;
-  is_executed: boolean;
-  twap_orders?: TwapOrder[];
-}
-
-export enum PositionType {
-  LP = "LP",
-  SPOT = "SPOT",
-}
-export interface Position {
-  platform: string;
-  asset: string;
-  value: number;
-  size: number;
-  creation_timestamp: Date;
-  collateral?: number;
-  yield?: number;
-  liquidation_price?: number;
-  asset_prices?: {
-    asset: string;
-    price: number;
-  }[];
-  position_type: PositionType;
-}
-
-export type TwapOrder = Omit<Order, "twap_orders">;
 
 export enum FundStatus {
   RAISING = 0, // deposits possible, withdraws possible (inputToken), manager can't move funds

@@ -1,28 +1,58 @@
-import { TradeOptions } from "../../api/models";
-import Selector from "../Form/Selector";
+import React from "react";
+import { Menu } from "@headlessui/react";
+import { FaChevronDown } from "react-icons/fa";
+import "../Exchange/ChartTokenSelector.css";
 
-const tradeOptions = [
-  { id: TradeOptions.LIMIT, name: "Limit" },
-  { id: TradeOptions.OCO, name: "OCO" },
-  { id: TradeOptions.TRAILING_STOP, name: "Trailing Stop" },
-  { id: TradeOptions.LIMIT_TRIGGER, name: "Trigger (Limit)" },
-];
+export enum TradeOptions {
+  SPOT,
+  OCO,
+  TRAILING_STOP,
+  MARKET_TRIGGER,
+}
+export default function TradeOptionSelector(props: {
+  selectedTradeOption: { key: TradeOptions; name: string };
+  onSelectTradeOption: (tradeOption: TradeOptions) => void;
+}) {
+  const { selectedTradeOption, onSelectTradeOption } = props;
+  const tradeOptions = [
+    { key: TradeOptions.SPOT, name: "Spot" },
+    { key: TradeOptions.OCO, name: "OCO" },
+    { key: TradeOptions.TRAILING_STOP, name: "Trailing Stop" },
+    { key: TradeOptions.MARKET_TRIGGER, name: "Trigger (Market)" },
+  ];
 
-const TradeOptionSelector = (props: {
-  selected: TradeOptions;
-  setSelected: (topt: TradeOptions) => void;
-}) => {
-  const { selected, setSelected } = props;
+  const onSelect = async (action: any) => {
+    onSelectTradeOption(action);
+  };
+
+  var value = selectedTradeOption || tradeOptions[0];
 
   return (
-    <Selector
-      items={tradeOptions}
-      selectedItem={
-        tradeOptions.find((t) => t.id === selected) || tradeOptions[0]
-      }
-      setSelectedItem={(to) => setSelected(to.id)}
-    />
+    <Menu>
+      <Menu.Button as="div">
+        <button className={`App-cta small transparent chart-token-selector`}>
+          <span className="chart-token-selector--current">{value.name}</span>
+          {<FaChevronDown />}
+        </button>
+      </Menu.Button>
+      <div className="chart-token-menu">
+        <Menu.Items as="div" className="menu-items chart-token-menu-items">
+          {tradeOptions.map((option, index) => (
+            <Menu.Item key={index}>
+              <div
+                className="menu-item"
+                onClick={() => {
+                  onSelect(option);
+                }}
+              >
+                <span style={{ marginLeft: 5 }} className="token-label">
+                  {option.name}
+                </span>
+              </div>
+            </Menu.Item>
+          ))}
+        </Menu.Items>
+      </div>
+    </Menu>
   );
-};
-
-export default TradeOptionSelector;
+}

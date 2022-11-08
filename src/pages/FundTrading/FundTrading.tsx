@@ -1,33 +1,40 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
-import { t } from "@lingui/macro";
-import { useNetwork } from "wagmi";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  FunctionComponent,
+} from "react";
+// import { t } from "@lingui/macro";
+import { ethers } from "ethers";
+import { useAccount, useContractRead, useNetwork } from "wagmi";
 
+import { USD_DECIMALS, formatAmount } from "../../data/formatting";
+
+import { getContract } from "../../config/addresses";
 import { getTokens } from "../../config/tokens";
-import SwapBox from "../../components/SwapBox/SwapBox";
+
+import Button from "../../components/Form/Button";
+import SwapBox from "../../components/Fund/SwapBox";
+import FundBanner from "../../components/Fund/FundBanner";
 import PriceChart from "../../components/Charts/PriceChart";
-import TradingOrders from "../../components/Fund/OpenOrders";
+import TradingOrders from "../../components/Fund/TradingOrders";
 import Tabs from "../../components/Tabs/Tabs";
-import ActionSelector from "../../components/Fund/ActionSelector";
-import { Action, ActionTypes } from "../../config/actions";
-import OpenPositions from "../../components/Fund/OpenPositions";
+
+const { AddressZero } = ethers.constants;
 
 const OrderList: FunctionComponent = (props) => {
   return (
     <div>
-      <div>
+      <div className="Exchange-list-tab-container">
         <Tabs
           options={[
             {
-              label: t`Positions`,
-              content: (
-                <div>
-                  <OpenPositions />
-                </div>
-              ),
+              label: `Positions`,
+              content: <TradingOrders />,
             },
             {
-              label: t`Orders`,
-              content: <TradingOrders />,
+              label: `Orders`,
+              content: <div>Orders stuff</div>,
             },
           ]}
         />
@@ -37,11 +44,6 @@ const OrderList: FunctionComponent = (props) => {
 };
 
 const FundTrading = () => {
-  const [actionToPerform, setActionToPerform] = useState<Action>();
-  useEffect(() => {
-    document.title = "Barren Wuffet | Fund Trading";
-  }, []);
-
   const { chain } = useNetwork();
 
   const tokens = chain ? getTokens(chain.id) : [];
@@ -50,42 +52,29 @@ const FundTrading = () => {
   const toTokenAddress = tokens[1]?.address;
 
   // const indexPricesUrl = getServerUrl(chainId, "/prices");
-  // const { data: indexPrices } = useQuery([indexPricesUrl], {
+  // const { data: indexPrices } = useSWR([indexPricesUrl], {
   //   fetcher: (...args) => fetch(...args).then((res) => res.json()),
   //   refreshInterval: 500,
   //   refreshWhenHidden: true,
   // });
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-row ">
-        <div className="md:basis-3/4">
-          <div className="bg-gray-dark mx-5 mb-2 rounded-xl px-5 py-5">
-            {chain && (
-              <ActionSelector
-                chainId={chain.id}
-                selectedAction={actionToPerform}
-                onSelectAction={(action: Action) => setActionToPerform(action)}
-                actionType={ActionTypes.Trading}
-              />
-            )}
-          </div>
-          <div className="bg-gray-dark mx-5 mb-10 rounded-xl px-5 py-1">
-            <PriceChart
-              title={"USD/ETH"}
-              priceFeed={() => []}
-              fromToken={fromTokenAddress}
-              toToken={toTokenAddress}
-            />
-          </div>
-          <div className="bg-gray-dark mx-5 mb-10 rounded-xl px-8 py-1">
+    <div className="Exchange page-layout">
+      <FundBanner />
+      <div className="Exchange-content">
+        <div className="Exchange-left">
+          <PriceChart
+            title={"USD/ETH"}
+            priceFeed={() => []}
+            fromToken={fromTokenAddress}
+            toToken={toTokenAddress}
+          />
+          <div className="Exchange-lists large">
             <OrderList />
           </div>
         </div>
-        <div className="md:basis-1/4">
-          <div className="bg-gray-dark mx-5 mb-10 rounded-xl px-8 py-1">
-            <SwapBox tokens={tokens} />
-          </div>
+        <div className="Exchange-right">
+          <SwapBox tokens={tokens} />
         </div>
       </div>
     </div>

@@ -1,24 +1,19 @@
-import { API, APIConfig } from "../../api/graph";
-import { Fund, Order, Position } from "../../api/models";
+import { API, API_Config } from "../../api/api";
+import { Fund } from "../../api/models";
 import { funds } from "./funds";
 import { pools } from "./pools";
 import { priceFeed } from "./priceChart";
-import { openOrders } from "./openOrders";
-import { openPositions } from "./openPositions";
 
 export class DummyAPI implements API {
-  graphUrl: string;
+  graph_url: string;
 
-  constructor(config: APIConfig) {
-    this.graphUrl = "";
+  constructor(config?: API_Config) {
+    // we ignore the config as the dummy api doesnt care.
+    this.graph_url = "";
   }
 
   getPools = () => Promise.resolve(pools);
   getFunds: () => Promise<Fund[]> = async () => Promise.resolve(funds);
   //   getFunds = () => Promise.resolve(funds);
   getPriceFeed = () => Promise.resolve(priceFeed);
-  getOpenOrders: () => Promise<Order[]> = async () =>
-    Promise.resolve(openOrders);
-  getPositions: () => Promise<Position[]> = async () =>
-    Promise.resolve(openPositions);
 }

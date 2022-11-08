@@ -1,4 +1,4 @@
-import { API } from "../api/graph";
+import { API } from "../api/api";
 import { DummyAPI } from "../test/data/dummyAPI";
 
 export function isDevelopment() {
@@ -9,6 +9,11 @@ export function isLocal() {
   return window.location.host?.includes("localhost");
 }
 
-export const api = !!process.env.REACT_APP_GRAPH_URL
-  ? new API({ graphUrl: process.env.REACT_APP_GRAPH_URL })
-  : new DummyAPI({ graphUrl: "" });
+export function getGraphUrl() {
+  return (
+    process.env.GRAPH_URL ||
+    "http://localhost:8000/subgraphs/name/barren-wuffet"
+  );
+}
+
+export const api = isLocal() ? new DummyAPI() : new API();

@@ -1,18 +1,24 @@
+import React from "react";
+import { Listbox } from "@headlessui/react";
 import { Token } from "../../config/tokens";
-import Selector from "./Selector";
 
 export default function TokenSelector(props: {
   tokens: Token[];
-  selectedToken?: Token;
-  setSelectedToken: (value: Token) => void;
+  selectedToken: string;
+  setSelectedToken: (value: string) => void;
 }) {
   const { tokens, selectedToken, setSelectedToken } = props;
 
   return (
-    <Selector
-      items={tokens}
-      selectedItem={selectedToken}
-      setSelectedItem={setSelectedToken}
-    />
+    <Listbox value={selectedToken} onChange={setSelectedToken}>
+      <Listbox.Button>{selectedToken}</Listbox.Button>
+      <Listbox.Options>
+        {tokens.map((token) => (
+          <Listbox.Option key={token.address} value={token.name}>
+            {token.name}
+          </Listbox.Option>
+        ))}
+      </Listbox.Options>
+    </Listbox>
   );
 }
