@@ -1,13 +1,14 @@
 import { useState } from "react";
 
-import Checkbox from "../../ui/Checkbox";
 import ConnectWallet from "../../ui/ConnectWallet";
 import PaymentsField from "../../ui/PaymentsField";
 import { ReactComponent as InfoIcon } from "../../../img/icons/info.svg";
 import Tabs from "../../Tabs/Tabs";
 import { t } from "@lingui/macro";
+import Checkbox from "../../Form/Checkbox";
 
 const DepositTab = () => {
+  const [depositWrapped, setDepositWrapped] = useState(false);
   return (
     <div className="select-none">
       <div className="mb-[13px]">
@@ -20,7 +21,11 @@ const DepositTab = () => {
         <PaymentsField title="ETH" icon={"ethsm.svg"} />
       </div>
 
-      <Checkbox label="Deposit Wrapped" />
+      <Checkbox
+        label="Deposit Wrapped"
+        isChecked={depositWrapped}
+        setIsChecked={setDepositWrapped}
+      />
 
       <div className="flex justify-between mt-[24px]">
         <span className="font-ubuntu text-white font-normal text-[14px]">
