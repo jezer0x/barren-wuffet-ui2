@@ -5,10 +5,14 @@ import FundsList from "../../components/Fund/FundsList";
 import Button from "../../components/Button/Button";
 import FAQ from "../../components/FAQ/FAQ";
 import faqs from "../../config/faqs";
+import Contracts from "../../components/Contracts/Contracts";
+import Payments from "../../components/Payments/Payments";
 
 export default function Home() {
   return (
     <div className="container mx-auto">
+      <Contracts />
+      <Payments />
       <div className="max-w-5xl mx-auto pt-20 sm:pt-24 lg:pt-32">
         <h1 className="text-slate-900 font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight text-center">
           <Trans>Decentralized Fund Management Platform</Trans>
