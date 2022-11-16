@@ -1,13 +1,13 @@
 import { useState } from "react";
-import PaymentsDeposit from "./Deposit";
-import PaymentsSwap from "./Swap";
-import PaymentsWithdraw from "./Withdraw";
+import Deposit from "./Deposit";
+import Swap from "./Swap";
+import Withdraw from "./Withdraw";
 
 const Action = () => {
   const [tab, setTab] = useState(0);
 
   return (
-    <div className="mt-[10px] container mx-auto w-[350px] rounded-[15px] px-[23px] pt-[28px] pb-[26px] bg-card">
+    <div className="mt-[10px] container mx-auto w-[350px] rounded-[15px] px-[15px] pt-[28px] pb-[26px] bg-card">
       <div className="flex justify-around h-[47px] select-none">
         <div
           className={`flex items-center justify-center px-[15px] 
@@ -71,11 +71,11 @@ const Action = () => {
       {(() => {
         switch (tab) {
           case 0:
-            return <PaymentsDeposit />;
+            return <Deposit />;
           case 1:
-            return <PaymentsWithdraw />;
+            return <Withdraw />;
           case 2:
-            return <PaymentsSwap />;
+            return <Swap />;
           default:
             return null;
         }

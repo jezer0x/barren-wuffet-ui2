@@ -1,24 +1,37 @@
-import { useState } from "react";
+import { t } from "@lingui/macro";
+import Tabs from "../../Tabs/Tabs";
 
-import Subtab from "../../ui/Subtab";
+const WithdrawAmount = () => {
+  return (
+    <div className="select-none">
+      <div className="mb-[21px]"></div>
+    </div>
+  );
+};
+
+const Unstake = () => {
+  return (
+    <div className="select-none">
+      <div className="mb-[21px]"></div>
+    </div>
+  );
+};
 
 const Withdraw = () => {
-  const [subtab, setSubtab] = useState(0);
-
   return (
-    <div className="mt-[23px]">
-      <div className="flex select-none">
-        <Subtab
-          title="Withdraw"
-          isActive={subtab === 0}
-          setIsActive={() => setSubtab(0)}
-        />
-        <Subtab
-          title="Unstake"
-          isActive={subtab === 1}
-          setIsActive={() => setSubtab(1)}
-        />{" "}
-      </div>
+    <div className="mt-[23px] mb-[9px]">
+      <Tabs
+        options={[
+          {
+            label: t`Withdraw`,
+            content: <WithdrawAmount />,
+          },
+          {
+            label: t`Unstake`,
+            content: <Unstake />,
+          },
+        ]}
+      />
     </div>
   );
 };
