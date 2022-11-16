@@ -1,25 +1,45 @@
 import { useState } from "react";
 
 import ConnectWallet from "../../ui/ConnectWallet";
-import PaymentsField from "../../ui/PaymentsField";
 import { ReactComponent as InfoIcon } from "../../../img/icons/info.svg";
 import Tabs from "../../Tabs/Tabs";
 import { t } from "@lingui/macro";
 import Checkbox from "../../Form/Checkbox";
+import { getTokens } from "../../../config/tokens";
+import { useNetwork } from "wagmi";
+import { Input } from "../../Form/Input";
+import { BigNumber } from "ethers";
 
+const DepositAssets = () => {
+  const [tokenValues, setTokenValues] = useState<BigNumber[]>([]);
+  const { chain } = useNetwork();
+  const assets = getTokens(5).slice(0, 3);
+  return (
+    <div className="mb-[13px]">
+      {assets.map((a, i) => (
+        <Input
+          label={a.name}
+          value={tokenValues?.[i] || 0}
+          onChange={(val) =>
+            setTokenValues(tokenValues.map((v, j) => (j === i ? val : v)))
+          }
+          decimals={a.decimals}
+          icon={a.logoURI}
+          type="bignumber"
+        />
+      ))}
+    </div>
+  );
+};
 const DepositTab = () => {
   const [depositWrapped, setDepositWrapped] = useState(false);
+  const [tokenValues, setTokenValues] = useState<BigNumber[]>([]);
+  const { chain } = useNetwork();
+  const assets = chain ? getTokens(chain.id).slice(0, 3) : [];
+
   return (
     <div className="select-none">
-      <div className="mb-[13px]">
-        <PaymentsField title="USDT" icon={"usdtsm.svg"} />
-      </div>
-      <div className="mb-[13px]">
-        <PaymentsField title="WBTC" icon={"wbtcsm.svg"} />
-      </div>
-      <div className="mb-[27px]">
-        <PaymentsField title="ETH" icon={"ethsm.svg"} />
-      </div>
+      <DepositAssets />
 
       <Checkbox
         label="Deposit Wrapped"
@@ -46,10 +66,20 @@ const DepositTab = () => {
 };
 
 const StakeTab = () => {
+  const [lpAsset, setLpAsset] = useState(BigNumber.from(0));
+  const asset = getTokens(5)[0];
+
   return (
     <div className="select-none">
       <div className="mb-[21px]">
-        <PaymentsField title="LP Tokens" />
+        <Input
+          label={asset.name}
+          value={lpAsset}
+          onChange={setLpAsset}
+          decimals={asset.decimals}
+          icon={asset.logoURI}
+          type="bignumber"
+        />
       </div>
 
       <ConnectWallet />
@@ -60,12 +90,7 @@ const StakeTab = () => {
 const DepositAndStakeTab = (props: {}) => {
   return (
     <div className="select-none">
-      <div className="mb-[13px]">
-        <PaymentsField title="ETH" icon={"ethsm.svg"} />
-      </div>
-      <div className="mb-[22px]">
-        <PaymentsField title="stETH" icon={"usdtsm.svg"} />
-      </div>
+      <DepositAssets />
 
       <div className="flex justify-between">
         <span className="font-ubuntu text-white font-normal text-[14px]">
