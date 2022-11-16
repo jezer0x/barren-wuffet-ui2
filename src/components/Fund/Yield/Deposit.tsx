@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import ConnectWallet from "../../ui/ConnectWallet";
 import { ReactComponent as InfoIcon } from "../../../img/icons/info.svg";
 import Tabs from "../../Tabs/Tabs";
 import { t } from "@lingui/macro";
@@ -9,6 +8,7 @@ import { getTokens } from "../../../config/tokens";
 import { useNetwork } from "wagmi";
 import { Input } from "../../Form/Input";
 import { BigNumber } from "ethers";
+import Button from "../../Button/Button";
 
 const DepositAssets = () => {
   const [tokenValues, setTokenValues] = useState<BigNumber[]>([]);
@@ -60,7 +60,9 @@ const DepositTab = () => {
         <span className="font-ubuntu text-white text-[14px] w-[35px]">- %</span>
       </div>
 
-      <ConnectWallet />
+      <div className="flex justify-center mt-10">
+        <Button type="submit" label={t`Confirm`} />
+      </div>
     </div>
   );
 };
@@ -82,7 +84,9 @@ const StakeTab = () => {
         />
       </div>
 
-      <ConnectWallet />
+      <div className="flex justify-center mt-10">
+        <Button type="submit" label={t`Confirm`} />
+      </div>
     </div>
   );
 };
@@ -108,7 +112,9 @@ const DepositAndStakeTab = (props: {}) => {
         <span className="font-ubuntu text-white text-[14px] w-[35px]">- %</span>
       </div>
 
-      <ConnectWallet />
+      <div className="flex justify-center mt-10">
+        <Button type="submit" label={t`Confirm`} />
+      </div>
     </div>
   );
 };
