@@ -14,7 +14,6 @@ import {
   ContractToken,
   ETH_ADDRESS,
   getWethToken,
-  PRICE_DECIMALS,
   toContractToken,
   Token,
   TOKEN_TYPE,
@@ -23,12 +22,11 @@ import IUniswapV2Router02 from "../contracts/types/IUniswapV2Router02";
 import IUniswapV2Factory from "../contracts/types/IUniswapV2Factory";
 import IUniswapV2Pair from "../contracts/types/IUniswapV2Pair";
 
-import { Pair as SushiPair } from "../../.graphclient";
+import { Pair as SushiPair, PairHourSnapshot } from "../../.graphclient";
 
 import { ActionData } from "./rpc";
 import request, { gql } from "graphql-request";
 import { Pool } from "./models";
-import { bn } from "date-fns/locale";
 
 function createPath(
   tokenIn: Address,
@@ -242,11 +240,11 @@ export async function getSushiPools(chain: Chain) {
           name
           liquidityUSD
           # sum the following up for 24H vol/fee
-          daySnapshots(orderBy: date, orderDirection: desc, first: 24) {
+          hourSnapshots(orderBy: date, orderDirection: desc, first: 24) {
             volumeUSD
             feesUSD
           }
-          # apr = feesUSD
+          # apr = (feesUSD24h / tvl)*365*100%
         }
       }
     `
@@ -255,11 +253,25 @@ export async function getSushiPools(chain: Chain) {
   const ftoBN = (f: string) => {
     // Unclear how many decimals these vals can have
     // 48 seems enough?
-    return parseFixed(
-      FixedNumber.from(f, 48).round(PRICE_DECIMALS).toString(),
-      PRICE_DECIMALS
-    );
+    // round(0) because we don't need to be precise to the cent
+    return parseFixed(FixedNumber.from(f, 48).round(0).toString());
   };
+
+  function get24hVolume(daySnapshots: PairHourSnapshot[]) {
+    return daySnapshots.reduce(
+      (acc, cur) => acc.add(ftoBN(cur.volumeUSD)),
+      BigNumber.from(0)
+    );
+  }
+
+  function get24hFees(daySnapshots: PairHourSnapshot[]) {
+    return daySnapshots.reduce(
+      (acc, cur) => acc.add(ftoBN(cur.feesUSD)),
+      BigNumber.from(0)
+    );
+  }
+
+  console.log(data);
 
   return Promise.resolve(
     data.pairs.map(
@@ -268,10 +280,13 @@ export async function getSushiPools(chain: Chain) {
         indexToken: {
           symbol: pair.name,
         },
-        vAPY: ftoBN(pair.daySnapshots[0].feesUSD),
-        tAPY: ftoBN("12"),
-        volume: ftoBN(pair.daySnapshots[0].volumeUSD),
+        apr: get24hFees(pair.hourSnapshots)
+          .mul(365)
+          .mul(100_00)
+          .div(ftoBN(pair.liquidityUSD)),
+        volume: get24hVolume(pair.hourSnapshots),
         tvl: ftoBN(pair.liquidityUSD),
+        fee: ftoBN(pair.swapFee),
       })
     )
   );

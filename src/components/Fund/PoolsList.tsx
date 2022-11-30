@@ -16,18 +16,21 @@ const columns: ColumnDef<Pool, any>[] = [
   columnHelper.accessor((row) => row.indexToken.symbol, {
     header: t`Pool`,
   }),
-  columnHelper.accessor("vAPY", {
-    header: t`Base vAPY`,
-  }),
-  columnHelper.accessor("tAPY", {
-    header: t`Rewards tAPY`,
+  columnHelper.accessor("fee", {
+    header: t`Fee %`,
+    cell: (info) => formatAmount(info.getValue(), 2, 2, true), 
   }),
   columnHelper.accessor("volume", {
-    header: t`Volume`,
+    header: t`Volume (24h)`,
+    cell: (info) => formatAmount(info.getValue(), 0, 0, true), 
   }),
   columnHelper.accessor("tvl", {
     header: t`TVL`,
-    cell: (info) => formatAmount(info.getValue(), 2, true, "0.0"),
+    cell: (info) => formatAmount(info.getValue(), 0, 0, true), 
+  }),
+  columnHelper.accessor("apr", {
+    header: t`APR %`,
+    cell: (info) => formatAmount(info.getValue(), 2, 2, true), 
   }),
   {
     id: "close",

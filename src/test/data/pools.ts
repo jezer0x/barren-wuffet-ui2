@@ -7,8 +7,8 @@ export const pools: Pool[] = [
     indexToken: {
       symbol: "ETH",
     },
-    vAPY: parseEther("10"),
-    tAPY: parseEther("10"),
+    apr: parseEther("10"),
+    fee: parseEther("10"),
     volume: parseEther("1000"),
     tvl: parseEther("100000"),
   },
@@ -17,8 +17,8 @@ export const pools: Pool[] = [
     indexToken: {
       symbol: "BTC",
     },
-    vAPY: parseEther("10"),
-    tAPY: parseEther("10"),
+    apr: parseEther("10"),
+    fee: parseEther("10"),
     volume: parseEther("1000"),
     tvl: parseEther("100000"),
   },
@@ -27,8 +27,8 @@ export const pools: Pool[] = [
     indexToken: {
       symbol: "USD",
     },
-    vAPY: parseEther("10"),
-    tAPY: parseEther("10"),
+    apr: parseEther("10"),
+    fee: parseEther("10"),
     volume: parseEther("1000"),
     tvl: parseEther("100000"),
   },

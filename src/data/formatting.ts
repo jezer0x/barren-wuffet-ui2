@@ -54,6 +54,7 @@ export const padDecimals = (amount: string, minDecimals: number) => {
 
 export const formatAmount = (
   amount: ethers.BigNumberish | undefined,
+  amtDecimals: number, // e.g. amtDecimals = 2 means "3" is sent as 300
   displayDecimals: number | undefined,
   useCommas: boolean,
   defaultValue = "..."
@@ -64,7 +65,7 @@ export const formatAmount = (
   if (displayDecimals === undefined) {
     displayDecimals = 4;
   }
-  let amountStr = ethers.utils.formatUnits(amount, USD_DECIMALS);
+  let amountStr = ethers.utils.formatUnits(amount, amtDecimals);
   amountStr = limitDecimals(amountStr, displayDecimals);
   if (displayDecimals !== 0) {
     amountStr = padDecimals(amountStr, displayDecimals);

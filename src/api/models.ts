@@ -6,10 +6,10 @@ export interface Pool {
   indexToken: {
     symbol: string;
   };
-  vAPY: BigNumber;
-  tAPY: BigNumber;
+  fee: BigNumber;
   volume: BigNumber;
   tvl: BigNumber;
+  apr: BigNumber;
 }
 
 export interface Fund {
