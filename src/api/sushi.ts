@@ -4,7 +4,6 @@ import { parseFixed } from "@ethersproject/bignumber";
 import {
   Chain,
   chain as chainConfig,
-  chainId,
   useContractRead,
   useNetwork,
 } from "wagmi";
@@ -29,8 +28,6 @@ import { USD_DECIMALS, PCT_DECIMALS } from "../data/formatting";
 import { ActionData } from "./rpc";
 import request, { gql } from "graphql-request";
 import { Pool } from "./models";
-import { bn } from "date-fns/locale";
-import { parseISO } from "date-fns";
 
 function createPath(
   tokenIn: Address,
@@ -275,7 +272,7 @@ export async function getSushiPools(chain: Chain) {
   ) => {
     // Unclear how many decimals these vals can have
     // 48 seems enough?
-    let roundedBN = parseFixed(FixedNumber.from(s, 48).round(0).toString());
+    const roundedBN = parseFixed(FixedNumber.from(s, 48).round(0).toString());
     return roundedBN.mul(
       BigNumber.from(10).pow(wanted_decimals - origin_decimals)
     );
