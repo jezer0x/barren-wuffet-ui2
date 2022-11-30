@@ -4,7 +4,7 @@ import { Trans, t } from "@lingui/macro";
 
 import { createColumnHelper, Row, ColumnDef } from "@tanstack/react-table";
 
-import { formatAmount } from "../../data/formatting";
+import { formatAmount, formatPCT, formatUSD } from "../../data/formatting";
 import Table from "../Table/Table";
 import { useQuery } from "@tanstack/react-query";
 import { Pool } from "../../api/models";
@@ -19,19 +19,19 @@ const columns: ColumnDef<Pool, any>[] = [
   }),
   columnHelper.accessor("fee", {
     header: t`Fee %`,
-    cell: (info) => formatAmount(info.getValue(), 2, 2, true), 
+    cell: (info) => formatPCT(info.getValue()), 
   }),
   columnHelper.accessor("volume", {
     header: t`Volume (24h)`,
-    cell: (info) => formatAmount(info.getValue(), 0, 0, true), 
+    cell: (info) => formatUSD(info.getValue()), 
   }),
   columnHelper.accessor("tvl", {
     header: t`TVL`,
-    cell: (info) => formatAmount(info.getValue(), 0, 0, true), 
+    cell: (info) => formatUSD(info.getValue()), 
   }),
   columnHelper.accessor("apr", {
     header: t`APR %`,
-    cell: (info) => formatAmount(info.getValue(), 2, 2, true), 
+    cell: (info) => formatUSD(info.getValue()), 
   }),
 ];
 

@@ -24,6 +24,7 @@ import IUniswapV2Factory from "../contracts/types/IUniswapV2Factory";
 import IUniswapV2Pair from "../contracts/types/IUniswapV2Pair";
 
 import { Pair as SushiPair, PairHourSnapshot } from "../../.graphclient";
+import { USD_DECIMALS, PCT_DECIMALS } from "../data/formatting";
 
 import { ActionData } from "./rpc";
 import request, { gql } from "graphql-request";
@@ -261,13 +262,12 @@ export async function getSushiPools(chain: Chain) {
           }
           reserve0
           reserve1
-          # apr = feesUSD
         }
       }
     `
   );
 
-  const ftoBN = (f: string) => {
+  const usdStrToBN = (f: string) => {
     // Unclear how many decimals these vals can have
     // 48 seems enough?
     // round(0) because we don't need to be precise to the cent
@@ -276,19 +276,17 @@ export async function getSushiPools(chain: Chain) {
 
   function get24hVolume(daySnapshots: PairHourSnapshot[]) {
     return daySnapshots.reduce(
-      (acc, cur) => acc.add(ftoBN(cur.volumeUSD)),
+      (acc, cur) => acc.add(usdStrToBN(cur.volumeUSD)),
       BigNumber.from(0)
     );
   }
 
   function get24hFees(daySnapshots: PairHourSnapshot[]) {
     return daySnapshots.reduce(
-      (acc, cur) => acc.add(ftoBN(cur.feesUSD)),
+      (acc, cur) => acc.add(usdStrToBN(cur.feesUSD)),
       BigNumber.from(0)
     );
   }
-
-  console.log(data);
 
   return Promise.resolve(
     data.pairs.map(
@@ -319,11 +317,16 @@ export async function getSushiPools(chain: Chain) {
         ],
         apr: get24hFees(pair.hourSnapshots)
           .mul(365)
-          .mul(100_00)
-          .div(ftoBN(pair.liquidityUSD)),
-        volume: get24hVolume(pair.hourSnapshots),
-        tvl: ftoBN(pair.liquidityUSD),
-        fee: ftoBN(pair.swapFee),
+          .mul(100)
+          .mul(BigNumber.from(10).pow(PCT_DECIMALS))
+          .div(usdStrToBN(pair.liquidityUSD)),
+        volume: get24hVolume(pair.hourSnapshots).mul(
+          BigNumber.from(10).pow(USD_DECIMALS)
+        ),
+        tvl: usdStrToBN(pair.liquidityUSD).mul(
+          BigNumber.from(10).pow(USD_DECIMALS)
+        ),
+        fee: usdStrToBN(pair.swapFee), // already decimals = 2
       })
     )
   );

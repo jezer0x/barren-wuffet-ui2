@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 
-const USD_DECIMALS = 30;
+export const USD_DECIMALS = 2;
+export const PCT_DECIMALS = 2;
 
 export function numberWithCommas(x: string | number | undefined) {
   if (!x) {
@@ -74,6 +75,22 @@ export const formatAmount = (
     return numberWithCommas(amountStr);
   }
   return amountStr;
+};
+
+// % must be sent as decimals = PCT_DECIMALS
+export const formatPCT = (
+  amount: ethers.BigNumberish | undefined,
+  displayDecimals = 2
+) => {
+  return formatAmount(amount, PCT_DECIMALS, displayDecimals, true);
+};
+
+// USD must be sent as decimals = USD_DECIMALS
+export const formatUSD = (
+  amount: ethers.BigNumberish | undefined,
+  displayDecimals = 2
+) => {
+  return formatAmount(amount, USD_DECIMALS, displayDecimals, true);
 };
 
 export const formatDate = (dt: Date) =>
