@@ -267,25 +267,37 @@ export async function getSushiPools(chain: Chain) {
     `
   );
 
-  const usdStrToBN = (f: string) => {
+  // Takes s, truncates everything after the ".", returns BN
+  const strToRoundedBN = (
+    s: string,
+    origin_decimals: number = 0,
+    wanted_decimals: number = 0
+  ) => {
     // Unclear how many decimals these vals can have
     // 48 seems enough?
-    // round(0) because we don't need to be precise to the cent
-    return parseFixed(FixedNumber.from(f, 48).round(0).toString());
+    let roundedBN = parseFixed(FixedNumber.from(s, 48).round(0).toString());
+    return roundedBN.mul(
+      BigNumber.from(10).pow(wanted_decimals - origin_decimals)
+    );
   };
 
-  function get24hVolume(daySnapshots: PairHourSnapshot[]) {
+  function get24hVolumeUSD(daySnapshots: PairHourSnapshot[]) {
     return daySnapshots.reduce(
-      (acc, cur) => acc.add(usdStrToBN(cur.volumeUSD)),
+      (acc, cur) => acc.add(strToRoundedBN(cur.volumeUSD, 0, USD_DECIMALS)),
       BigNumber.from(0)
     );
   }
 
-  function get24hFees(daySnapshots: PairHourSnapshot[]) {
-    return daySnapshots.reduce(
-      (acc, cur) => acc.add(usdStrToBN(cur.feesUSD)),
-      BigNumber.from(0)
-    );
+  function getAprPCT(daySnapshots: PairHourSnapshot[], liquidityUSD: any) {
+    return daySnapshots
+      .reduce(
+        (acc, cur) => acc.add(strToRoundedBN(cur.feesUSD, 0, USD_DECIMALS)),
+        BigNumber.from(0)
+      )
+      .mul(365)
+      .mul(100)
+      .mul(BigNumber.from(10).pow(PCT_DECIMALS))
+      .div(strToRoundedBN(liquidityUSD, 0, USD_DECIMALS));
   }
 
   return Promise.resolve(
@@ -315,18 +327,10 @@ export async function getSushiPools(chain: Chain) {
           BigNumber.from(pair.reserve0),
           BigNumber.from(pair.reserve1),
         ],
-        apr: get24hFees(pair.hourSnapshots)
-          .mul(365)
-          .mul(100)
-          .mul(BigNumber.from(10).pow(PCT_DECIMALS))
-          .div(usdStrToBN(pair.liquidityUSD)),
-        volume: get24hVolume(pair.hourSnapshots).mul(
-          BigNumber.from(10).pow(USD_DECIMALS)
-        ),
-        tvl: usdStrToBN(pair.liquidityUSD).mul(
-          BigNumber.from(10).pow(USD_DECIMALS)
-        ),
-        fee: usdStrToBN(pair.swapFee), // already decimals = 2
+        apr: getAprPCT(pair.hourSnapshots, pair.liquidityUSD),
+        volume: get24hVolumeUSD(pair.hourSnapshots),
+        tvl: strToRoundedBN(pair.liquidityUSD, 0, USD_DECIMALS),
+        fee: strToRoundedBN(pair.swapFee, 2, PCT_DECIMALS),
       })
     )
   );
